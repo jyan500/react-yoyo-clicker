@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { useKeyDown } from "./hooks/useKeyDown"
 import './App.css';
+import {v4 as uuidv4} from "uuid"
 
 const App = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
@@ -8,6 +9,7 @@ const App = () => {
 	const [isClickerDisabled, setIsClickerDisabled] = useState(false)
 	const [showInputtedScores, setShowInputtedScores] = useState(false)
 	const [form, setForm] = useState({
+		id: "",
 		judgeName: "", 
 		playerName: "", 
 		contestName: "", 
@@ -21,6 +23,9 @@ const App = () => {
 	}
 	const onNegativeClick = () => {
 		setNegativeClicks(() => negativeClicks + 1)
+	}
+	const deleteScore = (id) => {
+		setSavedScores(savedScores.filter(score => score.id !== id))
 	}
 
 	useKeyDown(() => {
@@ -79,6 +84,13 @@ const App = () => {
 				<div className = "flex flex-row justify-center items-center">
 					<button onClick = {() => {
 						setIsClickerDisabled(false)
+						// set unique ID for the form when saving
+						setForm({...form, id: uuidv4()})
+						// if the user accidentally inputs a "negative" sign in the negative clicks
+						// section, parse it out
+						if (form.negativeClicks.toString().includes("-")){
+							setForm({...form, negativeClicks: parseInt(form.negativeClicks.toString().replace("-", ""))})
+						}
 						setSavedScores([...savedScores, form])
 					}} className = "p-2">Save</button>
 					<button onClick = {() => setIsClickerDisabled(false)}  className = "p-2">Cancel</button>
@@ -86,21 +98,26 @@ const App = () => {
 			</div>
 			<div className = {`${showInputtedScores ? "visible" : "hidden"} flex flex-col p-2`}>
 				<div className = "flex flex-row">
-					<div className = "w-1/5">Judge</div>	
-					<div className = "w-1/5">Contest</div>	
-					<div className = "w-1/5">Player</div>	
-					<div className = "w-1/5">Positive Clicks</div>	
-					<div className = "w-1/5">Negative Clicks</div>	
+					{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", ""].map((text) => {
+						return (<div className = "w-1/6">{text}</div>)
+					})}
 				</div>
 				{
 					savedScores.map(score => {
 						return (
-							<div className = "flex flex-row">
-								<div className = "w-1/5">{score.judgeName}</div>							
-								<div className = "w-1/5">{score.contestName}</div>							
-								<div className = "w-1/5">{score.playerName}</div>							
-								<div className = "w-1/5">+{score.positiveClicks}</div>							
-								<div className = "w-1/5">-{score.negativeClicks}</div>							
+							<div key = {score.id} className = "flex flex-row">
+								{["judgeName", "contestName", "playerName", "positiveClicks", "negativeClicks"].map((key) => {
+									let t = score[key]
+									if (key === "positiveClicks" || key === "negativeClicks"){
+										t = `${key === "positiveClicks" ? "+" : "-"}${score[key]}`
+									}
+									return (
+										<div className = "w-1/6">{
+											t
+										}</div>							
+									)	
+								})}
+								<div><button onClick = {() => deleteScore(score.id)}>Delete Score</button></div>							
 							</div>
 						)
 					})
