@@ -106,33 +106,6 @@ const App = () => {
 					<button onClick = {() => setIsClickerDisabled(false)}  className = {purpleButton}>Cancel</button>
 				</div>
 			</div>
-		{/*	<div className = {`${showInputtedScores ? "visible" : "hidden"} flex flex-col w-full`}>
-				<div className = "flex flex-row">
-					{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", ""].map((text) => {
-						return (<div className = "w-1/6">{text}</div>)
-					})}
-				</div>
-				{
-					savedScores.map(score => {
-						return (
-							<div key = {score.id} className = "flex flex-row">
-								{["judgeName", "contestName", "playerName", "positiveClicks", "negativeClicks"].map((key) => {
-									let t = score[key]
-									if (key === "positiveClicks" || key === "negativeClicks"){
-										t = `${key === "positiveClicks" ? "+" : "-"}${score[key]}`
-									}
-									return (
-										<div className = {`${styles.label} w-1/6`}>
-											{t}
-										</div>							
-									)	
-								})}
-								<div><button className = {purpleButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></div>							
-							</div>
-						)
-					})
-				}
-			</div>*/}
 			<table className="table-auto border-collapse border border-slate-500">
 			  <thead>
 			    <tr>
