@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useKeyDown } from "./hooks/useKeyDown"
 import './App.css';
 import {v4 as uuidv4} from "uuid"
+import { themes, styles } from "./styles"
 
 const App = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
@@ -17,6 +18,8 @@ const App = () => {
 		negativeClicks: 0
 	})
 	const [savedScores, setSavedScores] = useState([])
+
+	const purpleButton = `${themes.purple} ${styles.button}`
 
 	const onPositiveClick = () => {
 		setPositiveClicks(() => positiveClicks + 1)	
@@ -53,34 +56,41 @@ const App = () => {
 				</div>
 			</div>
 			<div className = "flex flex-row p-2 justify-center items-center">
-				<button className = "p-2" onClick={() => {
+				<button className = {purpleButton} onClick={() => {
 					setPositiveClicks(0)
 					setNegativeClicks(0)
 				}}>Reset</button>
-				<button onClick = {() => setIsClickerDisabled(true)} className = "p-2">Input Score</button>
-				<button onClick = {() => setShowInputtedScores(!showInputtedScores)} className = "p-2">{showInputtedScores ? "Hide": "View"} Scores</button>
+				<button className = {purpleButton} onClick = {() => setIsClickerDisabled(true)}>Input Score</button>
+				<button className = {purpleButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
 			</div>
-			<div className = {`${isClickerDisabled ? "visible": "hidden"} flex flex-col p-2 justify-center items-center`}>
-				<div className = "flex flex-row justify-center items-center">
-					<label className = "w-1/2">Judge Name</label>
-					<input value = {form.judgeName} onChange = {(e) => setForm({...form, judgeName: e.target.value})} className = "w-1/2 border" type = "text" name = "judgeName"/>
-				</div>
-				<div className = "flex flex-row justify-center items-center">
-					<label className = "w-1/2">Contest Name</label>
-					<input value = {form.contestName} onChange = {(e) => setForm({...form, contestName: e.target.value})} className = "w-1/2 border" type = "text" name = "contestName"/>	
-				</div>
-				<div className = "flex flex-row justify-center items-center">
-					<label className = "w-1/2">Player Name</label>
-					<input value = {form.playerName} onChange = {(e) => setForm({...form, playerName: e.target.value})} className = "w-1/2 border" type = "text" name = "playerName"/>	
-				</div>
-				<div className = "flex flex-row justify-center items-center">
-					<label className = "w-1/2">Positive Clicks</label>
-					<input value = {form.positiveClicks} onChange = {(e) => setForm({...form, positiveClicks: e.target.value})} className = "w-1/2 border" type = "number" name = "positiveClicks"/>
-				</div>
-				<div className = "flex flex-row justify-center items-center">
-					<label className = "w-1/2">Negative Clicks</label>
-					<input value = {form.negativeClicks} onChange = {(e) => setForm({...form, negativeClicks: e.target.value})} className = "w-1/2 border" type = "number" name = "negativeClicks"/>
-				</div>
+			<div className = {`${isClickerDisabled ? "visible": "hidden"} p-2 w-full max-w-sm`}>
+				{
+					[
+						{key: "judgeName", text: "Judge Name"}, 
+						{key: "contestName", text: "Contest Name"}, 
+						{key: "playerName", text: "Player Name"},
+						{key: "positiveClicks", text: "Positive Clicks"},
+						{key: "negativeClicks", text: "Negative Clicks"},
+					].map(t => {
+						return (
+							<div className="md:flex md:items-center mb-6">
+							    <div className="md:w-1/3">
+							      <label className={styles.label}>
+							      {t.text}
+							      </label>
+							    </div>
+							    <div className="md:w-2/3">
+							      <input className={styles.textInput}
+								    id="inline-full-name" 
+								    onChange={(e) => setForm({...form, [t.key]: e.target.value})}
+								    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
+								    value={form[t.key]}
+								  />
+							    </div>
+						    </div>
+						)	
+					})
+				}
 				<div className = "flex flex-row justify-center items-center">
 					<button onClick = {() => {
 						setIsClickerDisabled(false)
@@ -92,11 +102,11 @@ const App = () => {
 							setForm({...form, negativeClicks: parseInt(form.negativeClicks.toString().replace("-", ""))})
 						}
 						setSavedScores([...savedScores, form])
-					}} className = "p-2">Save</button>
-					<button onClick = {() => setIsClickerDisabled(false)}  className = "p-2">Cancel</button>
+					}} className = {purpleButton}>Save</button>
+					<button onClick = {() => setIsClickerDisabled(false)}  className = {purpleButton}>Cancel</button>
 				</div>
 			</div>
-			<div className = {`${showInputtedScores ? "visible" : "hidden"} flex flex-col p-2`}>
+		{/*	<div className = {`${showInputtedScores ? "visible" : "hidden"} flex flex-col w-full`}>
 				<div className = "flex flex-row">
 					{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", ""].map((text) => {
 						return (<div className = "w-1/6">{text}</div>)
@@ -112,17 +122,48 @@ const App = () => {
 										t = `${key === "positiveClicks" ? "+" : "-"}${score[key]}`
 									}
 									return (
-										<div className = "w-1/6">{
-											t
-										}</div>							
+										<div className = {`${styles.label} w-1/6`}>
+											{t}
+										</div>							
 									)	
 								})}
-								<div><button onClick = {() => deleteScore(score.id)}>Delete Score</button></div>							
+								<div><button className = {purpleButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></div>							
 							</div>
 						)
 					})
 				}
-			</div>
+			</div>*/}
+			<table className="table-auto border-collapse border border-slate-500">
+			  <thead>
+			    <tr>
+			    	{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", ""].map((text) => {
+						return (<th className = "border border-slate-600">{text}</th>)
+					})}
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{
+					savedScores.map(score => {
+						return (
+							<tr key = {score.id}>
+								{["judgeName", "contestName", "playerName", "positiveClicks", "negativeClicks"].map((key) => {
+									let t = score[key]
+									if (key === "positiveClicks" || key === "negativeClicks"){
+										t = `${key === "positiveClicks" ? "+" : "-"}${score[key]}`
+									}
+									return (
+										<td className = "border border-slate-700">
+											<span className = {styles.label}>{t}</span>
+										</td>							
+									)	
+								})}
+								<td><button className = {purpleButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
+							</tr>
+						)
+					})
+				}
+			  </tbody>
+			</table>
 		</div>
 	);
 }
