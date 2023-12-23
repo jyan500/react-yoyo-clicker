@@ -2,13 +2,16 @@ import React, {useState} from 'react';
 import { useKeyDown } from "./hooks/useKeyDown"
 import './App.css';
 import {v4 as uuidv4} from "uuid"
-import { themes, styles } from "./styles"
+import { buttonTheme, styles } from "./styles"
+import { YoutubeEmbed } from "./components/YoutubeEmbed" 
 
 const App = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
 	const [negativeClicks, setNegativeClicks] = useState(0)
 	const [isClickerDisabled, setIsClickerDisabled] = useState(false)
 	const [showInputtedScores, setShowInputtedScores] = useState(false)
+	const [ytVidLink, setYtVidLink] = useState("")
+	const [ytVidId, setYtVidId] = useState(null)
 	const [form, setForm] = useState({
 		id: "",
 		judgeName: "", 
@@ -19,7 +22,7 @@ const App = () => {
 	})
 	const [savedScores, setSavedScores] = useState([])
 
-	const purpleButton = `${themes.purple} ${styles.button}`
+	const defaultButton = `${buttonTheme("blue")} ${styles.button}`
 
 	const onPositiveClick = () => {
 		setPositiveClicks(() => positiveClicks + 1)	
@@ -29,6 +32,16 @@ const App = () => {
 	}
 	const deleteScore = (id) => {
 		setSavedScores(savedScores.filter(score => score.id !== id))
+	}
+	const parseVidLink = () => {
+		const ytUrl = new URL(ytVidLink)
+		if (ytUrl){
+			const queryParams = new URLSearchParams(ytUrl.search)
+			const vidId = queryParams.get("v")
+			if (vidId){
+				setYtVidId(vidId)
+			}
+		}
 	}
 
 	useKeyDown(() => {
@@ -41,27 +54,41 @@ const App = () => {
 
 	return (
 		<div className="flex flex-col justify-center items-center p-4">
-			<div className = "text-center p-2">
-			    <h1>Yoyo Clicker</h1>
-				<p>Press "F" for positive clicks, "D" for negative clicks. Click the "Reset" button to reset the scores, and "Input Score" to save the competitor name, freestyle and your scores. </p>
+			<div className = "p-2 mb-6">
+			    <h1 className = "font-bold text-6xl">Yoyo Clicker</h1>
+			</div>
+			<div className = "p-2">
+				<label className = {styles.verticalLabel + " mb-4"}>Please paste youtube link for the freestyle below.</label>
+				<input value = {ytVidLink} onChange = {(e) => setYtVidLink(e.target.value)} className = {styles.textInput + " mb-4 w-full"}/>
+				<button onClick = {parseVidLink} className = {defaultButton}>Submit</button>
+				<button className = {defaultButton} onClick = {() => setYtVidLink("")}>Clear</button>
+			</div>
+			{
+				ytVidId ? ( 
+				<div className = "p-2">
+					<YoutubeEmbed embedId={ytVidId}></YoutubeEmbed>
+				</div>): null
+			}
+			<div className = "text-center p-2 border">
+				<p className = {styles.label}>Press "F" for positive clicks, "D" for negative clicks. Click the "Reset" button to reset the scores, and "Input Score" to save the competitor name, freestyle and your scores. Note that the clickers are disabled while inputting scores.</p>
 			</div>
 			<div className = "flex flex-row p-2">
-				<div className = "flex flex-col justify-center items-center p-2">
+				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
 					<h1>Positive Clicks</h1>	
-					<div>+{positiveClicks}</div>
+					<div><span className = "text-xl">+{positiveClicks}</span></div>
 				</div>
-				<div className = "flex flex-col justify-center items-center p-2">
+				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
 					<h1>Negative Clicks</h1>
-					<div>-{negativeClicks}</div>
+					<div><span className = "text-xl">-{negativeClicks}</span></div>
 				</div>
 			</div>
 			<div className = "flex flex-row p-2 justify-center items-center">
-				<button className = {purpleButton} onClick={() => {
+				<button className = {defaultButton} onClick={() => {
 					setPositiveClicks(0)
 					setNegativeClicks(0)
 				}}>Reset</button>
-				<button className = {purpleButton} onClick = {() => setIsClickerDisabled(true)}>Input Score</button>
-				<button className = {purpleButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
+				<button className = {defaultButton} onClick = {() => setIsClickerDisabled(true)}>Input Score</button>
+				<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
 			</div>
 			<div className = {`${isClickerDisabled ? "visible": "hidden"} p-2 w-full max-w-sm`}>
 				{
@@ -73,9 +100,9 @@ const App = () => {
 						{key: "negativeClicks", text: "Negative Clicks"},
 					].map(t => {
 						return (
-							<div className="md:flex md:items-center mb-6">
+							<div className="md:flex md:items-center mb-4">
 							    <div className="md:w-1/3">
-							      <label className={styles.label}>
+							      <label className={`${styles.label} text-right mr-4`}>
 							      {t.text}
 							      </label>
 							    </div>
@@ -102,15 +129,15 @@ const App = () => {
 							setForm({...form, negativeClicks: parseInt(form.negativeClicks.toString().replace("-", ""))})
 						}
 						setSavedScores([...savedScores, form])
-					}} className = {purpleButton}>Save</button>
-					<button onClick = {() => setIsClickerDisabled(false)}  className = {purpleButton}>Cancel</button>
+					}} className = {defaultButton}>Save</button>
+					<button onClick = {() => setIsClickerDisabled(false)}  className = {defaultButton}>Cancel</button>
 				</div>
 			</div>
-			<table className="table-auto border-collapse border border-slate-500">
+			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto border-collapse border border-slate-500`}>
 			  <thead>
 			    <tr>
 			    	{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", ""].map((text) => {
-						return (<th className = "border border-slate-600">{text}</th>)
+						return (<th className = "border border-slate-600 p-2">{text}</th>)
 					})}
 			    </tr>
 			  </thead>
@@ -125,12 +152,12 @@ const App = () => {
 										t = `${key === "positiveClicks" ? "+" : "-"}${score[key]}`
 									}
 									return (
-										<td className = "border border-slate-700">
-											<span className = {styles.label}>{t}</span>
+										<td className = "border border-slate-700 p-2">
+											<span className = {`${styles.label} text-center`}>{t}</span>
 										</td>							
 									)	
 								})}
-								<td><button className = {purpleButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
+								<td><button className = {defaultButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
 							</tr>
 						)
 					})
