@@ -3,13 +3,15 @@ import { useKeyDown } from "./hooks/useKeyDown"
 import './App.css';
 import {v4 as uuidv4} from "uuid"
 import { buttonTheme, styles } from "./styles"
-import { YoutubeEmbed } from "./components/YoutubeEmbed" 
+import { YoutubeEmbed } from "./components/YoutubeEmbed/YoutubeEmbed.js" 
 
 const App = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
 	const [negativeClicks, setNegativeClicks] = useState(0)
 	const [isClickerDisabled, setIsClickerDisabled] = useState(false)
-	const [showInputtedScores, setShowInputtedScores] = useState(false)
+	const [showScoreForm, setShowScoreForm] = useState(false)
+	const [showInputtedScores, setShowInputtedScores] = useState(true)
+	const [showUrlError, setShowUrlError] = useState(false)
 	const [ytVidLink, setYtVidLink] = useState("")
 	const [ytVidId, setYtVidId] = useState(null)
 	const [form, setForm] = useState({
@@ -20,6 +22,9 @@ const App = () => {
 		positiveClicks: 0, 
 		negativeClicks: 0
 	})
+	const widthDefault = 853
+	const heightDefault = 480
+	const [iFrameDimensions, SetIFrameDimensions] = useState({width: widthDefault, height: heightDefault})
 	const [savedScores, setSavedScores] = useState([])
 
 	const defaultButton = `${buttonTheme("blue")} ${styles.button}`
@@ -33,14 +38,33 @@ const App = () => {
 	const deleteScore = (id) => {
 		setSavedScores(savedScores.filter(score => score.id !== id))
 	}
+	const increaseSize = () => {
+		// const previous = ytVidId
+		// setYtVidId(null)
+		// setYtVidId(previous)
+		SetIFrameDimensions((state) => ({width: state.width + 15, height: state.width + 15}))
+	}
+	const decreaseSize = () => {
+		// const previous = ytVidId
+		// setYtVidId(null)
+		// setYtVidId(previous)
+		SetIFrameDimensions((state) => ({width: state.width - 15, height: state.width - 15}))
+	}
+
 	const parseVidLink = () => {
-		const ytUrl = new URL(ytVidLink)
-		if (ytUrl){
-			const queryParams = new URLSearchParams(ytUrl.search)
-			const vidId = queryParams.get("v")
-			if (vidId){
-				setYtVidId(vidId)
+		setShowUrlError(false)
+		try  {
+			const ytUrl = new URL(ytVidLink)
+			if (ytUrl){
+				const queryParams = new URLSearchParams(ytUrl.search)
+				const vidId = queryParams.get("v")
+				if (vidId){
+					setYtVidId(vidId)
+				}
 			}
+		}
+		catch {
+			setShowUrlError(true)
 		}
 	}
 
@@ -59,18 +83,27 @@ const App = () => {
 			</div>
 			<div className = "p-2">
 				<label className = {styles.verticalLabel + " mb-4"}>Please paste youtube link for the freestyle below.</label>
-				<input value = {ytVidLink} onChange = {(e) => setYtVidLink(e.target.value)} className = {styles.textInput + " mb-4 w-full"}/>
+				<input value = {ytVidLink} onFocus = {(e) => {setIsClickerDisabled(true)}} onBlur = {(e) => {setIsClickerDisabled(false)}} onChange = {(e) => setYtVidLink(e.target.value)} className = {styles.textInput + " mb-4 w-full"}/>
 				<button onClick = {parseVidLink} className = {defaultButton}>Submit</button>
-				<button className = {defaultButton} onClick = {() => setYtVidLink("")}>Clear</button>
+				<button onClick = {increaseSize} className = {`${defaultButton} ${ytVidId ? "visible": "hidden"}`}>Increase Size</button>
+				<button onClick = {decreaseSize} className = {`${defaultButton} ${ytVidId ? "visible": "hidden"}`}>Decrease Size</button>
+				<button className = {defaultButton} onClick = {() => {
+					setYtVidLink("") 
+					setYtVidId(null)
+					SetIFrameDimensions({width: widthDefault, height: heightDefault})
+				}}>Clear</button>
+				<p className = {`${styles.label} ${showUrlError ? "visible": "hidden"}`}>Please type in valid youtube URL</p>
 			</div>
 			{
 				ytVidId ? ( 
-				<div className = "p-2">
-					<YoutubeEmbed embedId={ytVidId}></YoutubeEmbed>
-				</div>): null
+				<>
+					<YoutubeEmbed iFrameDimensions = {iFrameDimensions} embedId={ytVidId}></YoutubeEmbed>
+				</>): null
 			}
 			<div className = "text-center p-2 border">
-				<p className = {styles.label}>Press "F" for positive clicks, "D" for negative clicks. Click the "Reset" button to reset the scores, and "Input Score" to save the competitor name, freestyle and your scores. Note that the clickers are disabled while inputting scores.</p>
+				<p className = {styles.label}>Press "F" for positive clicks, "D" for negative clicks.</p>
+				<p>Click the "Reset" button to reset the scores, "Input Score" to save the competitor name, freestyle and your scores, and "View Score" to view your inputted scores.</p>
+				<p>Note that the clickers are disabled while inputting scores.</p>
 			</div>
 			<div className = "flex flex-row p-2">
 				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
@@ -87,10 +120,13 @@ const App = () => {
 					setPositiveClicks(0)
 					setNegativeClicks(0)
 				}}>Reset</button>
-				<button className = {defaultButton} onClick = {() => setIsClickerDisabled(true)}>Input Score</button>
+				<button className = {defaultButton} onClick = {() => {
+					setIsClickerDisabled(true)
+					setShowScoreForm(true)
+				}}>Input Score</button>
 				<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
 			</div>
-			<div className = {`${isClickerDisabled ? "visible": "hidden"} p-2 w-full max-w-sm`}>
+			<div className = {`${showScoreForm ? "visible": "hidden"} p-2 w-full max-w-sm`}>
 				{
 					[
 						{key: "judgeName", text: "Judge Name"}, 
@@ -121,6 +157,7 @@ const App = () => {
 				<div className = "flex flex-row justify-center items-center">
 					<button onClick = {() => {
 						setIsClickerDisabled(false)
+						setShowScoreForm(false)
 						// set unique ID for the form when saving
 						setForm({...form, id: uuidv4()})
 						// if the user accidentally inputs a "negative" sign in the negative clicks
