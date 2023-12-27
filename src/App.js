@@ -168,12 +168,16 @@ const App = () => {
 						setIsClickerDisabled(false)
 						setShowScoreForm(false)
 						// set unique ID for the form when saving
-						setForm({...form, id: uuidv4()})
+						setForm((form) => ({...form, id: uuidv4()}))
 						// if the user accidentally inputs a "negative" sign in the negative clicks
 						// section, parse it out
 						if (form.negativeClicks.toString().includes("-")){
-							console.log("negative sign found")
-							setForm({...form, negativeClicks: parseInt(form.negativeClicks.toString().replace("-", ""))})
+							const parsed = form.negativeClicks.toString().replace("-", "")
+							setForm((form) => {
+								const newForm = {...form, negativeClicks: parsed}
+								setSavedScores([...savedScores, newForm])
+								return newForm
+							})
 						}
 						setSavedScores([...savedScores, form])
 					}} className = {defaultButton}>Save</button>

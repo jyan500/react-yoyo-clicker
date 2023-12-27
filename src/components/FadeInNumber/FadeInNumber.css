@@ -1,8 +1,10 @@
 .fade-container {
   opacity: 0;
+  /* transition is applied to animate the opaciy change over the time duration */
   transition: opacity .375s ease-in-out;
 }
 
+/* the visible class is added dynamically via react to trigger the fade in effect*/
 .fade-container.visible {
   opacity: 1;
 }
