@@ -15,6 +15,7 @@ const App = () => {
 	const [showUrlError, setShowUrlError] = useState(false)
 	const [showPlusOne, setShowPlusOne] = useState(false)
 	const [showMinusOne, setShowMinusOne] = useState(false)
+	const [showPlusTwo, setShowPlusTwo] = useState(false)
 	const [ytVidLink, setYtVidLink] = useState("")
 	const [ytVidId, setYtVidId] = useState(null)
 	const [form, setForm] = useState({
@@ -24,6 +25,11 @@ const App = () => {
 		contestName: "", 
 		positiveClicks: 0, 
 		negativeClicks: 0
+	})
+	const [formErrors, setFormErrors] = useState({
+		judgeName: {"text": "Judge's Name is required", "show": false},
+		playerName: {"text": "Player's Name is required", "show": false},
+		contestName: {"text": "Contest Name is required", "show": false}
 	})
 	const widthDefault = 853
 	const heightDefault = 480
@@ -36,15 +42,24 @@ const App = () => {
 		setShowPlusOne(true)
 		const timeoutId = setTimeout(() => {
 	    	setShowPlusOne(false);
-	    }, 375);
+	    }, 375)
 	    return () => clearTimeout(timeoutId)
+	}
+
+	const showAndHidePlusTwo = () => {
+		setShowPlusTwo(true)
+		const timeoutId = setTimeout(() => {
+			setShowPlusTwo(false)	
+		}, 375)
+		return () => clearTimeout(timeoutId)
+
 	}
 
 	const showAndHideMinusOne = () => {
 		setShowMinusOne(true)
 		const timeoutId = setTimeout(() => {
 	    	setShowMinusOne(false);
-	    }, 375);
+	    }, 375)
 	    return () => clearTimeout(timeoutId)
 	}
 
@@ -54,8 +69,49 @@ const App = () => {
 	const onNegativeClick = () => {
 		setNegativeClicks(() => negativeClicks + 1)
 	}
+	const onDoubleClick = () => {
+		setPositiveClicks(() => positiveClicks + 2)	
+	}
 	const deleteScore = (id) => {
 		setSavedScores(savedScores.filter(score => score.id !== id))
+	}
+	const validateForm = () => {
+		let valid = true
+		let keys = Object.keys(formErrors)
+		Object.keys(form).forEach((key) => {
+			if (keys.includes(key) && form[key] === ""){
+				setFormErrors((errors) => {
+					return {...errors, [key]: {...errors[key], show: true}}
+				})
+				valid = false
+			}
+			else {
+				setFormErrors((errors) => {
+					return {...errors, [key]: {...errors[key], show: false}}
+				})
+			}
+		})
+		return valid
+	}
+	const submitForm = () => {
+		if (!validateForm()){
+			return	
+		}
+		setIsClickerDisabled(false)
+		setShowScoreForm(false)
+		// set unique ID for the form when saving
+		setForm((form) => ({...form, id: uuidv4()}))
+		// if the user accidentally inputs a "negative" sign in the negative clicks
+		// section, parse it out
+		if (form.negativeClicks.toString().includes("-")){
+			const parsed = form.negativeClicks.toString().replace("-", "")
+			setForm((form) => {
+				const newForm = {...form, negativeClicks: parsed}
+				setSavedScores([...savedScores, newForm])
+				return newForm
+			})
+		}
+		setSavedScores([...savedScores, form])
 	}
 	const parseVidLink = () => {
 		setShowUrlError(false)
@@ -84,13 +140,19 @@ const App = () => {
 		showAndHideMinusOne()
 	}, ["d"], isClickerDisabled)
 
+	useKeyDown(() => {
+		onDoubleClick()	
+		showAndHidePlusTwo()
+	}, ["g"], isClickerDisabled)
+
 	return (
 		<div className="flex flex-col justify-center items-center p-4">
 			<div className = "p-2 mb-6">
 			    <h1 className = "font-bold text-6xl">Yoyo Clicker</h1>
 			</div>
 			<div className = "mb-6">
-				<label className = {styles.verticalLabel + " mb-4"}>Please paste youtube link for the freestyle below.</label>
+				<label className = {styles.verticalLabel}>Please paste youtube link for the freestyle below.</label>
+				<label className = "text-xs">** Unfortunately, Youtube Shorts are <b>not</b> supported currently.</label>
 				<input value = {ytVidLink} onFocus = {(e) => {setIsClickerDisabled(true)}} onBlur = {(e) => {setIsClickerDisabled(false)}} onChange = {(e) => setYtVidLink(e.target.value)} className = {styles.textInput + " mb-4 w-full"}/>
 				<button onClick = {parseVidLink} className = {defaultButton}>Submit</button>
 				<button className = {defaultButton} onClick = {() => {
@@ -100,8 +162,9 @@ const App = () => {
 				<p className = {`${styles.label} ${showUrlError ? "visible": "hidden"}`}>Please type in valid youtube URL</p>
 			</div>
 			<div className = "flex flex-row justify-center items-center">
-				<FadeInNumber showNum={showPlusOne} text={"+1"}/>
-				<FadeInNumber showNum={showMinusOne} text={"-1"}/>
+				<FadeInNumber showNum={showPlusOne} color = "lime" text={"+1"}/>
+				<FadeInNumber showNum={showPlusTwo} color = "sky" text={"+2"}/>
+				<FadeInNumber showNum={showMinusOne} color = "red" text={"-1"}/>
 			</div>
 			{
 				ytVidId ? ( 
@@ -110,7 +173,7 @@ const App = () => {
 				</>): null
 			}
 			<div className = "text-center mt-6 p-2 border">
-				<p className = {styles.label}>Press "F" for positive clicks, "D" for negative clicks.</p>
+				<p className = {styles.label}>Press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click </p>
 				<p>Click the "Reset" button to reset the scores, "Input Score" to save the competitor name, freestyle and your scores, and "View Score" to view your inputted scores.</p>
 				<p>Note that the clickers are disabled while inputting scores.</p>
 			</div>
@@ -158,30 +221,18 @@ const App = () => {
 								    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
 								    value={form[t.key]}
 								  />
+								  <span className = {`${formErrors[t.key]?.show ? "visible": "hidden"} font-bold text-red-500`}>{formErrors[t.key]?.text}</span>
 							    </div>
 						    </div>
 						)	
 					})
 				}
 				<div className = "flex flex-row justify-center items-center">
+					<button onClick = {submitForm} className = {defaultButton}>Save</button>
 					<button onClick = {() => {
-						setIsClickerDisabled(false)
+						setIsClickerDisabled(false) 
 						setShowScoreForm(false)
-						// set unique ID for the form when saving
-						setForm((form) => ({...form, id: uuidv4()}))
-						// if the user accidentally inputs a "negative" sign in the negative clicks
-						// section, parse it out
-						if (form.negativeClicks.toString().includes("-")){
-							const parsed = form.negativeClicks.toString().replace("-", "")
-							setForm((form) => {
-								const newForm = {...form, negativeClicks: parsed}
-								setSavedScores([...savedScores, newForm])
-								return newForm
-							})
-						}
-						setSavedScores([...savedScores, form])
-					}} className = {defaultButton}>Save</button>
-					<button onClick = {() => setIsClickerDisabled(false)}  className = {defaultButton}>Cancel</button>
+					}}  className = {defaultButton}>Cancel</button>
 				</div>
 			</div>
 			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto border-collapse border border-slate-500`}>

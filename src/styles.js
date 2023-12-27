@@ -3,14 +3,21 @@
  * @return string designating tailwind className for that color
  **/
 export const buttonTheme = (color) => {
-	return `bg-${color}-500 hover:bg-${color}-400 text-white`
+	const themes = {
+		"red": "bg-red-500 hover:bg-red-400",	
+		"blue": "bg-blue-500 hover:bg-blue-400",
+	}
+	return `${themes[color]} text-white`
 }
 /**
  * @param string designating color such as "purple" or "blue"
  * @return string designating tailwind className for that color focus
  **/
 export const textFocus = (color) => {
-	return `focus:border-${color}-500`
+	const themes = {
+		"blue": "focus:border-blue-500"	
+	}
+	return themes[color]
 }
 
 export const styles = {
