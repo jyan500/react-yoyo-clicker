@@ -4,6 +4,7 @@ import './App.css';
 import {v4 as uuidv4} from "uuid"
 import { buttonTheme, styles } from "./styles"
 import { YoutubeEmbed } from "./components/YoutubeEmbed/YoutubeEmbed.js" 
+import { FadeInNumber } from "./components/FadeInNumber/FadeInNumber.js" 
 
 const App = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
@@ -12,6 +13,8 @@ const App = () => {
 	const [showScoreForm, setShowScoreForm] = useState(false)
 	const [showInputtedScores, setShowInputtedScores] = useState(true)
 	const [showUrlError, setShowUrlError] = useState(false)
+	const [showPlusOne, setShowPlusOne] = useState(false)
+	const [showMinusOne, setShowMinusOne] = useState(false)
 	const [ytVidLink, setYtVidLink] = useState("")
 	const [ytVidId, setYtVidId] = useState(null)
 	const [form, setForm] = useState({
@@ -24,10 +27,26 @@ const App = () => {
 	})
 	const widthDefault = 853
 	const heightDefault = 480
-	const [iFrameDimensions, SetIFrameDimensions] = useState({width: widthDefault, height: heightDefault})
 	const [savedScores, setSavedScores] = useState([])
 
 	const defaultButton = `${buttonTheme("blue")} ${styles.button}`
+	const alertButton = `${buttonTheme("red")} ${styles.button}`
+
+	const showAndHidePlusOne = () => {
+		setShowPlusOne(true)
+		const timeoutId = setTimeout(() => {
+	    	setShowPlusOne(false);
+	    }, 375);
+	    return () => clearTimeout(timeoutId)
+	}
+
+	const showAndHideMinusOne = () => {
+		setShowMinusOne(true)
+		const timeoutId = setTimeout(() => {
+	    	setShowMinusOne(false);
+	    }, 375);
+	    return () => clearTimeout(timeoutId)
+	}
 
 	const onPositiveClick = () => {
 		setPositiveClicks(() => positiveClicks + 1)	
@@ -38,19 +57,6 @@ const App = () => {
 	const deleteScore = (id) => {
 		setSavedScores(savedScores.filter(score => score.id !== id))
 	}
-	const increaseSize = () => {
-		// const previous = ytVidId
-		// setYtVidId(null)
-		// setYtVidId(previous)
-		SetIFrameDimensions((state) => ({width: state.width + 15, height: state.width + 15}))
-	}
-	const decreaseSize = () => {
-		// const previous = ytVidId
-		// setYtVidId(null)
-		// setYtVidId(previous)
-		SetIFrameDimensions((state) => ({width: state.width - 15, height: state.width - 15}))
-	}
-
 	const parseVidLink = () => {
 		setShowUrlError(false)
 		try  {
@@ -70,10 +76,12 @@ const App = () => {
 
 	useKeyDown(() => {
 		onPositiveClick()
+		showAndHidePlusOne()
 	}, ["f"], isClickerDisabled)
 
 	useKeyDown(() => {
 		onNegativeClick()
+		showAndHideMinusOne()
 	}, ["d"], isClickerDisabled)
 
 	return (
@@ -81,26 +89,27 @@ const App = () => {
 			<div className = "p-2 mb-6">
 			    <h1 className = "font-bold text-6xl">Yoyo Clicker</h1>
 			</div>
-			<div className = "p-2">
+			<div className = "mb-6">
 				<label className = {styles.verticalLabel + " mb-4"}>Please paste youtube link for the freestyle below.</label>
 				<input value = {ytVidLink} onFocus = {(e) => {setIsClickerDisabled(true)}} onBlur = {(e) => {setIsClickerDisabled(false)}} onChange = {(e) => setYtVidLink(e.target.value)} className = {styles.textInput + " mb-4 w-full"}/>
 				<button onClick = {parseVidLink} className = {defaultButton}>Submit</button>
-				<button onClick = {increaseSize} className = {`${defaultButton} ${ytVidId ? "visible": "hidden"}`}>Increase Size</button>
-				<button onClick = {decreaseSize} className = {`${defaultButton} ${ytVidId ? "visible": "hidden"}`}>Decrease Size</button>
 				<button className = {defaultButton} onClick = {() => {
 					setYtVidLink("") 
 					setYtVidId(null)
-					SetIFrameDimensions({width: widthDefault, height: heightDefault})
 				}}>Clear</button>
 				<p className = {`${styles.label} ${showUrlError ? "visible": "hidden"}`}>Please type in valid youtube URL</p>
+			</div>
+			<div className = "flex flex-row justify-center items-center">
+				<FadeInNumber showNum={showPlusOne} text={"+1"}/>
+				<FadeInNumber showNum={showMinusOne} text={"-1"}/>
 			</div>
 			{
 				ytVidId ? ( 
 				<>
-					<YoutubeEmbed iFrameDimensions = {iFrameDimensions} embedId={ytVidId}></YoutubeEmbed>
+					<YoutubeEmbed embedId={ytVidId}></YoutubeEmbed>
 				</>): null
 			}
-			<div className = "text-center p-2 border">
+			<div className = "text-center mt-6 p-2 border">
 				<p className = {styles.label}>Press "F" for positive clicks, "D" for negative clicks.</p>
 				<p>Click the "Reset" button to reset the scores, "Input Score" to save the competitor name, freestyle and your scores, and "View Score" to view your inputted scores.</p>
 				<p>Note that the clickers are disabled while inputting scores.</p>
@@ -115,7 +124,7 @@ const App = () => {
 					<div><span className = "text-xl">-{negativeClicks}</span></div>
 				</div>
 			</div>
-			<div className = "flex flex-row p-2 justify-center items-center">
+			<div className = "flex flex-row mb-6 justify-center items-center">
 				<button className = {defaultButton} onClick={() => {
 					setPositiveClicks(0)
 					setNegativeClicks(0)
@@ -163,6 +172,7 @@ const App = () => {
 						// if the user accidentally inputs a "negative" sign in the negative clicks
 						// section, parse it out
 						if (form.negativeClicks.toString().includes("-")){
+							console.log("negative sign found")
 							setForm({...form, negativeClicks: parseInt(form.negativeClicks.toString().replace("-", ""))})
 						}
 						setSavedScores([...savedScores, form])
@@ -194,7 +204,7 @@ const App = () => {
 										</td>							
 									)	
 								})}
-								<td><button className = {defaultButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
+								<td><button className = {alertButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
 							</tr>
 						)
 					})

@@ -2,17 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./YoutubeEmbed.css"
 
-export const YoutubeEmbed = ({ embedId, iFrameDimensions }) => {
-	const { width, height } = iFrameDimensions
+export const YoutubeEmbed = ({ embedId }) => {
 	return (
-	    <iframe
-	    	className="video"
-		    src={`https://www.youtube.com/embed/${embedId}`}
-		    frameBorder="0"
-		    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-		    allowFullScreen
-		    title="Embedded youtube"
-	    />
+		<div className = "flex justify-center w-full">
+		    <iframe
+		    	className="video"
+			    src={`https://www.youtube.com/embed/${embedId}`}
+			    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+			    allowFullScreen
+			    title="Embedded youtube"
+		    />
+	    </div>
 	)
 }
 
