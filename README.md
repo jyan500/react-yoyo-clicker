@@ -20,7 +20,10 @@ Tech Stack: React + Tailwind CSS
 # How to Use:
 
 1. If you're scoring a freestyle uploaded to youtube, copy + paste the youtube link into the 
-search bar and click "Submit". Note that if you're not scoring via youtube, skip to step 3.
+search bar and click "Submit".
+    * It must be a **regular** youtube video link that includes a video ID in `?v=` like so: https://www.youtube.com/watch?v=F5GO6JwzfkY&list=PLKSgreKUG67JT7lzsJshlWwGcBPRqbK9g&ab_channel=yoyovideoarchive
+    * Due to this constraint above, youtube shorts are **not** currently supported.
+    * Note that if you're not scoring via youtube, skip to step 3.
 
 2. Once the youtube video has loaded in the embed, you can start the video and begin scoring.
 
@@ -29,3 +32,5 @@ search bar and click "Submit". Note that if you're not scoring via youtube, skip
 4. After scoring, click "Input Score" to input your scores in the form that should appear below the clicker scores.
 
 5. After inputting your scores, you can save and view all the scores that you've submitted.
+
+6. You can also download all the inputted scores in .xlsx format by clicking the "Download Scores" button
