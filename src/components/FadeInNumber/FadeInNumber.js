@@ -8,6 +8,6 @@ export const FadeInNumber = ({text, showNum, color}) => {
 		"sky": "text-sky-500",	
 	}
 	return (
-		<p className = {`fade-container text-2xl ${colorVariants[color]} ${showNum ? "visible" : ""}`}>{text}</p>
+		<p className = {`fade-container text-8xl ${colorVariants[color]} ${showNum ? "visible" : ""}`}>{text}</p>
 	)	
 }

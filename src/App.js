@@ -5,6 +5,7 @@ import {v4 as uuidv4} from "uuid"
 import { buttonTheme, styles } from "./styles"
 import { YoutubeEmbed } from "./components/YoutubeEmbed/YoutubeEmbed.js" 
 import { FadeInNumber } from "./components/FadeInNumber/FadeInNumber.js" 
+import {utils, writeFile} from "xlsx";
 
 const App = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
@@ -129,6 +130,25 @@ const App = () => {
 			setShowUrlError(true)
 		}
 	}
+	const downloadExcel = () => {
+		const colWidth = [...Array(5)].map((_, i) => {
+			return {width: 30}
+		});
+		const data = savedScores.map((score) => {
+			return {
+				"Judge": score.judgeName, 
+				"Contest": score.contestName, 
+				"Player": score.playerName, 
+				"Positive Clicks": `+${score.positiveClicks.toString()}`, 
+				"Negative Clicks": `-${score.negativeClicks.toString()}`, 
+			}		
+		})
+		const worksheet = utils.json_to_sheet(data)	
+		worksheet["!cols"] = colWidth
+		const workbook = utils.book_new()
+		utils.book_append_sheet(workbook, worksheet, "Sheet1")
+		writeFile(workbook, "score-sheet.xlsx")
+	}
 
 	useKeyDown(() => {
 		onPositiveClick()
@@ -152,7 +172,7 @@ const App = () => {
 			</div>
 			<div className = "mb-6">
 				<label className = {styles.verticalLabel}>Please paste youtube link for the freestyle below.</label>
-				<label className = "text-xs">** Unfortunately, Youtube Shorts are <b>not</b> supported currently.</label>
+				<label className = "text-xs">** Currently, Youtube Shorts are <b>not</b> supported.</label>
 				<input value = {ytVidLink} onFocus = {(e) => {setIsClickerDisabled(true)}} onBlur = {(e) => {setIsClickerDisabled(false)}} onChange = {(e) => setYtVidLink(e.target.value)} className = {styles.textInput + " mb-4 w-full"}/>
 				<button onClick = {parseVidLink} className = {defaultButton}>Submit</button>
 				<button className = {defaultButton} onClick = {() => {
@@ -161,17 +181,17 @@ const App = () => {
 				}}>Clear</button>
 				<p className = {`${styles.label} ${showUrlError ? "visible": "hidden"}`}>Please type in valid youtube URL</p>
 			</div>
-			<div className = "flex flex-row justify-center items-center">
-				<FadeInNumber showNum={showPlusOne} color = "lime" text={"+1"}/>
-				<FadeInNumber showNum={showPlusTwo} color = "sky" text={"+2"}/>
-				<FadeInNumber showNum={showMinusOne} color = "red" text={"-1"}/>
-			</div>
 			{
 				ytVidId ? ( 
 				<>
 					<YoutubeEmbed embedId={ytVidId}></YoutubeEmbed>
 				</>): null
 			}
+			<div className = "flex flex-row justify-center items-center">
+				<FadeInNumber showNum={showMinusOne} color = "red" text={"-1"}/>
+				<FadeInNumber showNum={showPlusOne} color = "lime" text={"+1"}/>
+				<FadeInNumber showNum={showPlusTwo} color = "sky" text={"+2"}/>
+			</div>
 			<div className = "text-center mt-6 p-2 border">
 				<p className = {styles.label}>Press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click </p>
 				<p>Click the "Reset" button to reset the scores, "Input Score" to save the competitor name, freestyle and your scores, and "View Score" to view your inputted scores.</p>
@@ -197,6 +217,7 @@ const App = () => {
 					setShowScoreForm(true)
 				}}>Input Score</button>
 				<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
+				<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>
 			</div>
 			<div className = {`${showScoreForm ? "visible": "hidden"} p-2 w-full max-w-sm`}>
 				{
