@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useKeyDown } from "./hooks/useKeyDown"
 import './App.css';
 import {v4 as uuidv4} from "uuid"
@@ -38,6 +38,17 @@ const App = () => {
 
 	const defaultButton = `${buttonTheme("blue")} ${styles.button}`
 	const alertButton = `${buttonTheme("red")} ${styles.button}`
+
+	useEffect(() => {
+	    const savedScores = JSON.parse(localStorage.getItem("savedScores"));
+	    if (savedScores?.length) {
+			setSavedScores(savedScores);
+		}
+	}, []);
+
+	useEffect(() => {
+		localStorage.setItem("savedScores", JSON.stringify(savedScores));
+	}, [savedScores]);
 
 	const showAndHidePlusOne = () => {
 		setShowPlusOne(true)
