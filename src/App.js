@@ -87,20 +87,21 @@ const App = () => {
 	const deleteScore = (id) => {
 		setSavedScores(savedScores.filter(score => score.id !== id))
 	}
+	const editScore = (id) => {
+		const f = savedScores.find((score) => score.id === id)
+		setShowScoreForm(true)	
+		setForm(f)
+	}
 	const validateForm = () => {
 		let valid = true
 		let keys = Object.keys(formErrors)
 		Object.keys(form).forEach((key) => {
+			// show the errors specifically for Judge Name, Player Name and Contest Name
 			if (keys.includes(key) && form[key] === ""){
 				setFormErrors((errors) => {
 					return {...errors, [key]: {...errors[key], show: true}}
 				})
 				valid = false
-			}
-			else {
-				setFormErrors((errors) => {
-					return {...errors, [key]: {...errors[key], show: false}}
-				})
 			}
 		})
 		return valid
@@ -112,18 +113,20 @@ const App = () => {
 		setIsClickerDisabled(false)
 		setShowScoreForm(false)
 		// set unique ID for the form when saving
-		setForm((form) => ({...form, id: uuidv4()}))
+		// if the form already has an id, update the existing form instead of creating a new entry
+		let isEditing = form.id !== ""
+		let tempForm = {...form}
+		if (!isEditing) {
+			tempForm = {...tempForm, id: uuidv4()}
+		}
 		// if the user accidentally inputs a "negative" sign in the negative clicks
 		// section, parse it out
 		if (form.negativeClicks.toString().includes("-")){
-			const parsed = form.negativeClicks.toString().replace("-", "")
-			setForm((form) => {
-				const newForm = {...form, negativeClicks: parsed}
-				setSavedScores([...savedScores, newForm])
-				return newForm
-			})
+			const parsed = tempForm.negativeClicks.toString().replace("-", "")
+			tempForm = {...tempForm, negativeClicks: parsed}
 		}
-		setSavedScores([...savedScores, form])
+		setForm(tempForm)
+		isEditing ? setSavedScores(savedScores.map((score) => score.id === tempForm.id ? tempForm : score)) : setSavedScores([...savedScores, tempForm])
 	}
 	const parseVidLink = () => {
 		setShowUrlError(false)
@@ -226,6 +229,7 @@ const App = () => {
 				<button className = {defaultButton} onClick = {() => {
 					setIsClickerDisabled(true)
 					setShowScoreForm(true)
+					setForm({id: "", judgeName: "", playerName: "", contestName: "", positiveClicks: 0, negativeClicks: 0})
 				}}>Input Score</button>
 				<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
 				<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>
@@ -267,11 +271,11 @@ const App = () => {
 					}}  className = {defaultButton}>Cancel</button>
 				</div>
 			</div>
-			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto border-collapse border border-slate-500`}>
-			  <thead>
+			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto`}>
+			  <thead className = "text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 			    <tr>
-			    	{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", ""].map((text) => {
-						return (<th className = "border border-slate-600 p-2">{text}</th>)
+			    	{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", "", ""].map((text) => {
+						return (<th className = "p-2">{text}</th>)
 					})}
 			    </tr>
 			  </thead>
@@ -279,18 +283,19 @@ const App = () => {
 			  	{
 					savedScores.map(score => {
 						return (
-							<tr key = {score.id}>
+							<tr className = "odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700" key = {score.id}>
 								{["judgeName", "contestName", "playerName", "positiveClicks", "negativeClicks"].map((key) => {
 									let t = score[key]
 									if (key === "positiveClicks" || key === "negativeClicks"){
 										t = `${key === "positiveClicks" ? "+" : "-"}${score[key]}`
 									}
 									return (
-										<td className = "border border-slate-700 p-2">
-											<span className = {`${styles.label} text-center`}>{t}</span>
+										<td className = "p-2">
+											<span className = "text-center">{t}</span>
 										</td>							
 									)	
 								})}
+								<td><button className = {defaultButton} onClick = {() => editScore(score.id)}>Edit Score</button></td>							
 								<td><button className = {alertButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
 							</tr>
 						)
