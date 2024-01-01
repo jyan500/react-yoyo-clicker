@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { useKeyDown } from "./hooks/useKeyDown"
-import './App.css';
+import { useKeyDown } from "../../hooks/useKeyDown"
 import {v4 as uuidv4} from "uuid"
-import { buttonTheme, styles } from "./styles"
-import { YoutubeEmbed } from "./components/YoutubeEmbed/YoutubeEmbed.js" 
-import { FadeInNumber } from "./components/FadeInNumber/FadeInNumber.js" 
+import { buttonTheme, styles } from "../../styles"
+import { YoutubeEmbed } from "../YoutubeEmbed/YoutubeEmbed.jsx" 
+import { FadeInNumber } from "../FadeInNumber/FadeInNumber.jsx" 
 import {utils, writeFile} from "xlsx";
 
-const App = () => {
+export const Home = () => {
 	const [positiveClicks, setPositiveClicks] = useState(0)	
 	const [negativeClicks, setNegativeClicks] = useState(0)
 	const [isClickerDisabled, setIsClickerDisabled] = useState(false)
@@ -125,6 +124,7 @@ const App = () => {
 			const parsed = tempForm.negativeClicks.toString().replace("-", "")
 			tempForm = {...tempForm, negativeClicks: parsed}
 		}
+		// TODO: parse out leading zeroes
 		setForm(tempForm)
 		isEditing ? setSavedScores(savedScores.map((score) => score.id === tempForm.id ? tempForm : score)) : setSavedScores([...savedScores, tempForm])
 	}
@@ -180,7 +180,7 @@ const App = () => {
 	}, ["g"], isClickerDisabled)
 
 	return (
-		<div className="flex flex-col justify-center items-center p-4">
+		<div className="flex flex-col justify-center items-center p-4 h-full">
 			<div className = "p-2 mb-6">
 			    <h1 className = "font-bold text-6xl">Yoyo Clicker</h1>
 			</div>
@@ -306,5 +306,3 @@ const App = () => {
 		</div>
 	);
 }
-
-export default App;
