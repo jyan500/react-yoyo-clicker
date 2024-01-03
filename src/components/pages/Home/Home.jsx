@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { useKeyDown } from "../../hooks/useKeyDown"
+import { useKeyDown } from "../../../hooks/useKeyDown"
 import {v4 as uuidv4} from "uuid"
-import { buttonTheme, styles } from "../../styles"
-import { YoutubeEmbed } from "../YoutubeEmbed/YoutubeEmbed.jsx" 
-import { FadeInNumber } from "../FadeInNumber/FadeInNumber.jsx" 
+import { buttonTheme, styles } from "../../../styles"
+import { YoutubeEmbed } from "../../YoutubeEmbed/YoutubeEmbed.jsx" 
+import { FadeInNumber } from "../../FadeInNumber/FadeInNumber.jsx" 
 import {utils, writeFile} from "xlsx";
 
 export const Home = () => {
@@ -180,7 +180,7 @@ export const Home = () => {
 	}, ["g"], isClickerDisabled)
 
 	return (
-		<div className="flex flex-col justify-center items-center p-4 h-full">
+		<div className="flex flex-col justify-center items-center h-full">
 			<div className = "p-2 mb-6">
 			    <h1 className = "font-bold text-6xl">Yoyo Clicker</h1>
 			</div>
@@ -213,12 +213,12 @@ export const Home = () => {
 			</div>
 			<div className = "flex flex-row p-2">
 				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
-					<h1>Positive Clicks</h1>	
-					<div><span className = "text-xl">+{positiveClicks}</span></div>
+					<h1 className = "text-4xl">Positive Clicks</h1>	
+					<div><span className = "text-4xl">+{positiveClicks}</span></div>
 				</div>
 				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
-					<h1>Negative Clicks</h1>
-					<div><span className = "text-xl">-{negativeClicks}</span></div>
+					<h1 className = "text-4xl">Negative Clicks</h1>
+					<div><span className = "text-4xl">-{negativeClicks}</span></div>
 				</div>
 			</div>
 			<div className = "flex flex-row mb-6 justify-center items-center">
@@ -271,7 +271,7 @@ export const Home = () => {
 					}}  className = {defaultButton}>Cancel</button>
 				</div>
 			</div>
-			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto`}>
+			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto w-full`}>
 			  <thead className = "text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 			    <tr>
 			    	{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", "", ""].map((text) => {
