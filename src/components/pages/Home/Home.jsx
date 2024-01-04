@@ -208,13 +208,13 @@ export const Home = () => {
 			</div>
 			<div className = "text-center mt-6 p-2 border">
 				<p className = {styles.label}>Press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click </p>
-				<p>Click the "Reset" button to reset the scores, "Input Score" to save the competitor name, freestyle and your scores, and "View Score" to view your inputted scores.</p>
+				<p>Click the "Reset" button to reset the scores</p>
 				<p>Note that the clickers are disabled while inputting scores.</p>
 			</div>
 
-			<div className = "flex flex-row">
-				<div>
-					<div className = "flex flex-row p-2">
+			<div className = "flex flex-row w-full">
+				<div className = "flex w-1/2 flex-col p-4 items-center">
+					<div className = "flex flex-row justify-center items-center">
 						<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
 							<h1 className = "text-xl">Positive Clicks</h1>	
 							<div><span className = "text-xl">+{positiveClicks}</span></div>
@@ -229,16 +229,16 @@ export const Home = () => {
 							setPositiveClicks(0)
 							setNegativeClicks(0)
 						}}>Reset</button>
-						<button className = {defaultButton} onClick = {() => {
+						{/*<button className = {defaultButton} onClick = {() => {
 							setIsClickerDisabled(true)
 							setShowScoreForm(true)
 							setForm({id: "", judgeName: "", playerName: "", contestName: "", positiveClicks: 0, negativeClicks: 0})
 						}}>Input Score</button>
-						<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
+*/}						<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
 						<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>
 					</div>
 				</div>
-				<div className = {`${showScoreForm ? "visible": "invisible"} p-2 w-full max-w-sm`}>
+				<div className = "flex w-1/2 flex-col p-4 ">
 					{
 						[
 							{key: "judgeName", text: "Judge Name"}, 
@@ -257,6 +257,8 @@ export const Home = () => {
 								    <div className="md:w-2/3">
 								      <input className={styles.textInput}
 									    id="inline-full-name" 
+									    onFocus = {(e) => {setIsClickerDisabled(true)}} 
+									    onBlur = {(e) => {setIsClickerDisabled(false)}} 
 									    onChange={(e) => setForm({...form, [t.key]: e.target.value})}
 									    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
 									    value={form[t.key]}
@@ -271,8 +273,8 @@ export const Home = () => {
 						<button onClick = {submitForm} className = {defaultButton}>Save</button>
 						<button onClick = {() => {
 							setIsClickerDisabled(false) 
-							setShowScoreForm(false)
-						}}  className = {defaultButton}>Cancel</button>
+							setForm({id: "", judgeName: "", playerName: "", contestName: "", positiveClicks: 0, negativeClicks: 0})
+						}}  className = {defaultButton}>Clear</button>
 					</div>
 				</div>
 			</div>

@@ -19,7 +19,7 @@ const App = () => {
 						<HamburgerButton onClick={handleToggleSidebar} />
 					    <SideBar isOpen={isSidebarOpen} onClose={handleToggleSidebar} />
 				    </div>
-				    <div className = "flex flex-1">
+				    <div className = "flex-1">
 					    <div>
 					    	<Routes>
 						    	<Route path = "/" element = {<Home/>}></Route>
