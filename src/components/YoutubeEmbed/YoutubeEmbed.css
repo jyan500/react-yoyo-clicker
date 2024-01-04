@@ -1,6 +1,6 @@
 .video {
 	aspect-ratio: 16 / 9;
-	width: 70%;
+	width: 100%;
 }
 @media screen and (max-width: 1200px) { 
 	.video { 

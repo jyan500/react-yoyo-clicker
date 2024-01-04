@@ -211,67 +211,72 @@ export const Home = () => {
 				<p>Click the "Reset" button to reset the scores, "Input Score" to save the competitor name, freestyle and your scores, and "View Score" to view your inputted scores.</p>
 				<p>Note that the clickers are disabled while inputting scores.</p>
 			</div>
-			<div className = "flex flex-row p-2">
-				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
-					<h1 className = "text-4xl">Positive Clicks</h1>	
-					<div><span className = "text-4xl">+{positiveClicks}</span></div>
+
+			<div className = "flex flex-row">
+				<div>
+					<div className = "flex flex-row p-2">
+						<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
+							<h1 className = "text-xl">Positive Clicks</h1>	
+							<div><span className = "text-xl">+{positiveClicks}</span></div>
+						</div>
+						<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
+							<h1 className = "text-xl">Negative Clicks</h1>
+							<div><span className = "text-xl">-{negativeClicks}</span></div>
+						</div>
+					</div>
+					<div className = "flex flex-row mb-6 justify-center items-center">
+						<button className = {defaultButton} onClick={() => {
+							setPositiveClicks(0)
+							setNegativeClicks(0)
+						}}>Reset</button>
+						<button className = {defaultButton} onClick = {() => {
+							setIsClickerDisabled(true)
+							setShowScoreForm(true)
+							setForm({id: "", judgeName: "", playerName: "", contestName: "", positiveClicks: 0, negativeClicks: 0})
+						}}>Input Score</button>
+						<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
+						<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>
+					</div>
 				</div>
-				<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
-					<h1 className = "text-4xl">Negative Clicks</h1>
-					<div><span className = "text-4xl">-{negativeClicks}</span></div>
-				</div>
-			</div>
-			<div className = "flex flex-row mb-6 justify-center items-center">
-				<button className = {defaultButton} onClick={() => {
-					setPositiveClicks(0)
-					setNegativeClicks(0)
-				}}>Reset</button>
-				<button className = {defaultButton} onClick = {() => {
-					setIsClickerDisabled(true)
-					setShowScoreForm(true)
-					setForm({id: "", judgeName: "", playerName: "", contestName: "", positiveClicks: 0, negativeClicks: 0})
-				}}>Input Score</button>
-				<button className = {defaultButton} onClick = {() => setShowInputtedScores(!showInputtedScores)}>{showInputtedScores ? "Hide": "View"} Scores</button>
-				<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>
-			</div>
-			<div className = {`${showScoreForm ? "visible": "hidden"} p-2 w-full max-w-sm`}>
-				{
-					[
-						{key: "judgeName", text: "Judge Name"}, 
-						{key: "contestName", text: "Contest Name"}, 
-						{key: "playerName", text: "Player Name"},
-						{key: "positiveClicks", text: "Positive Clicks"},
-						{key: "negativeClicks", text: "Negative Clicks"},
-					].map(t => {
-						return (
-							<div className="md:flex md:items-center mb-4">
-							    <div className="md:w-1/3">
-							      <label className={`${styles.label} text-right mr-4`}>
-							      {t.text}
-							      </label>
+				<div className = {`${showScoreForm ? "visible": "invisible"} p-2 w-full max-w-sm`}>
+					{
+						[
+							{key: "judgeName", text: "Judge Name"}, 
+							{key: "contestName", text: "Contest Name"}, 
+							{key: "playerName", text: "Player Name"},
+							{key: "positiveClicks", text: "Positive Clicks"},
+							{key: "negativeClicks", text: "Negative Clicks"},
+						].map(t => {
+							return (
+								<div className="md:flex md:items-center mb-4">
+								    <div className="md:w-1/3">
+								      <label className={`${styles.label} text-right mr-4`}>
+								      {t.text}
+								      </label>
+								    </div>
+								    <div className="md:w-2/3">
+								      <input className={styles.textInput}
+									    id="inline-full-name" 
+									    onChange={(e) => setForm({...form, [t.key]: e.target.value})}
+									    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
+									    value={form[t.key]}
+									  />
+									  <span className = {`${formErrors[t.key]?.show ? "visible": "hidden"} font-bold text-red-500`}>{formErrors[t.key]?.text}</span>
+								    </div>
 							    </div>
-							    <div className="md:w-2/3">
-							      <input className={styles.textInput}
-								    id="inline-full-name" 
-								    onChange={(e) => setForm({...form, [t.key]: e.target.value})}
-								    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
-								    value={form[t.key]}
-								  />
-								  <span className = {`${formErrors[t.key]?.show ? "visible": "hidden"} font-bold text-red-500`}>{formErrors[t.key]?.text}</span>
-							    </div>
-						    </div>
-						)	
-					})
-				}
-				<div className = "flex flex-row justify-center items-center">
-					<button onClick = {submitForm} className = {defaultButton}>Save</button>
-					<button onClick = {() => {
-						setIsClickerDisabled(false) 
-						setShowScoreForm(false)
-					}}  className = {defaultButton}>Cancel</button>
+							)	
+						})
+					}
+					<div className = "flex flex-row justify-center items-center">
+						<button onClick = {submitForm} className = {defaultButton}>Save</button>
+						<button onClick = {() => {
+							setIsClickerDisabled(false) 
+							setShowScoreForm(false)
+						}}  className = {defaultButton}>Cancel</button>
+					</div>
 				</div>
 			</div>
-			<table className={`${showInputtedScores ? "visible": "hidden"} table-auto w-full`}>
+			<table className={`${showInputtedScores ? "visible": "invisible"} table-auto w-full`}>
 			  <thead className = "text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 			    <tr>
 			    	{["Judge", "Contest", "Player", "Positive Clicks", "Negative Clicks", "", ""].map((text) => {
