@@ -1,8 +1,9 @@
+type themeColors = "red" | "blue"
 /**
  * @param string designating color such as "purple" or "blue"
  * @return string designating tailwind className for that color
  **/
-export const buttonTheme = (color) => {
+export const buttonTheme = (color: themeColors) => {
 	const themes = {
 		"red": "bg-red-500 hover:bg-red-400",	
 		"blue": "bg-blue-500 hover:bg-blue-400",
@@ -13,11 +14,24 @@ export const buttonTheme = (color) => {
  * @param string designating color such as "purple" or "blue"
  * @return string designating tailwind className for that color focus
  **/
-export const textFocus = (color) => {
+export const textFocus = (color: themeColors) => {
 	const themes = {
-		"blue": "focus:border-blue-500"	
+		"blue": "focus:border-blue-500",
+		"red": "focus:border-red-500"
 	}
 	return themes[color]
+}
+
+export const colorVariants = {
+	"red": "text-red-500",	
+	"lime": "text-lime-500",	
+	"sky": "text-sky-500",	
+}
+
+export const borderVariants = {
+	"red": "border-red-500",
+	"lime": "border-lime-500",
+	"sky": "border-sky-500"
 }
 
 export const styles = {

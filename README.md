@@ -5,7 +5,7 @@ as well as for mock judging of Yoyo Freestyles uploaded to Youtube.
 
 Inspired by Judge Basher, as well as the Scales Collective Clicker.
 
-Tech Stack: React + Tailwind CSS
+Tech Stack: React + Typescript + Tailwind CSS
 
 # How to Run:
 
