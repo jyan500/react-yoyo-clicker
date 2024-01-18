@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit" 
 import { clickerConfig } from "./reducers/clickerConfig"
+import { clicker } from "./reducers/clicker"
 import { sideBar } from "./reducers/sideBar" 
 
 export const store = configureStore({
 	reducer: {
 		clickerConfig,
-		sideBar
+		sideBar,
+		clicker
 	}
 })
 

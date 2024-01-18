@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { HamburgerButton } from "./components/shared/HamburgerButton" 
 import { SideBar } from "./components/shared/SideBar" 
+import { SidePanel } from "./components/shared/SidePanel" 
 import { Footer } from "./components/shared/Footer"
 import { Home } from "./components/pages/home/Home" 
 
@@ -25,7 +26,7 @@ const App = () => {
 						</div>
 					</div>
 					<div className = "w-64">
-						<p>Side Panel In Progress...</p>
+						<SidePanel/>
 					</div>
 				</div>
 			</Router>
