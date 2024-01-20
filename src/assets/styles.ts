@@ -1,5 +1,3 @@
-type themeColors = "red" | "blue"
-type colorVariants = "red" | "lime" | "sky"
 /**
  * @param string designating color such as "purple" or "blue"
  * @return string designating tailwind className for that color

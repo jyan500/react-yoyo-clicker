@@ -14,8 +14,10 @@ import {
 	setPositiveClicks,
 	setNegativeClicks,
 	setTextFlash,
-	FlashTypeKey,
+	setBorderFlash,
 } from "../../reducers/clicker" 
+import type { FlashTypeKey, FlashTypes } from "../../types/common"
+import { getColor } from "../../helpers" 
 
 export const Clicker = () => {
 	const dispatch = useAppDispatch()
@@ -26,16 +28,24 @@ export const Clicker = () => {
 	const negativeClicks = useAppSelector((state) => state.clicker.negativeClicks)
 	const positiveClicks = useAppSelector((state) => state.clicker.positiveClicks)
 	const textFlash = useAppSelector((state) => state.clicker.textFlash)
+	const borderFlash = useAppSelector((state) => state.clicker.borderFlash)
 
 	const handleTextFlash = (type: FlashTypeKey) => {
 		dispatch(setTextFlash({...textFlash, [type]: true}))
-	    setTimeout(() => {
+	    const id = setTimeout(() => {
 	    	dispatch(setTextFlash({...textFlash, [type]: false}))
-	    }, 400);
+	    }, 300);
+	}
+	const handleBorderFlash = (type: FlashTypeKey) => {
+		dispatch(setBorderFlash({...borderFlash, [type]: true}))
+		const id = setTimeout(() => {
+			dispatch(setBorderFlash({...borderFlash, [type]: false}))
+		}, 300)
 	}
 
 	useKeyDown(() => {
 		handleTextFlash("plusOne")
+		handleBorderFlash("plusOne")
 		dispatch(setPositiveClicks(positiveClicks+1))
 		if (numberMode){
 			// showAndHidePlusOne()
@@ -48,6 +58,7 @@ export const Clicker = () => {
 
 	useKeyDown(() => {
 		handleTextFlash("minusOne")
+		handleBorderFlash("minusOne")
 		dispatch(setNegativeClicks(negativeClicks+1))
 		if (numberMode){
 			// showAndHideMinusOne()
@@ -60,6 +71,7 @@ export const Clicker = () => {
 
 	useKeyDown(() => {
 		handleTextFlash("plusTwo")
+		handleBorderFlash("plusTwo")
 		dispatch(setPositiveClicks(positiveClicks+2))
 		// showAndHidePlusTwo()
 		// showAndHideBorder()
@@ -71,7 +83,12 @@ export const Clicker = () => {
 			<YoutubeForm/>	
 			<ScoreInstructions/>
 			{ ytVidId !== "" ? (
-				<YoutubeEmbed/>
+				<YoutubeEmbed 
+					ytVidId = {ytVidId} 
+					shouldFlash = {borderFlash.plusOne || borderFlash.plusTwo || borderFlash.minusOne} 
+					isBorderMode = {true}
+					borderColor = {getColor("border", borderFlash)} 
+				/>
 			) : null}
 			<ScoreDisplay/>
 			<ScoreButtons/>

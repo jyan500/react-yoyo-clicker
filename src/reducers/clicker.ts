@@ -1,14 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "../store"
+import type { FlashTypes } from "../types/common" 
 
-export type FlashTypeKey = "plusOne" | "minusOne" | "plusTwo"
-
-interface FlashTypes {
-	plusOne: boolean
-	plusTwo: boolean
-	minusOne: boolean
-}
 
 interface InitialStateType {
 	ytVidId: string
@@ -16,6 +10,7 @@ interface InitialStateType {
 	positiveClicks: number
 	negativeClicks: number
 	textFlash: FlashTypes
+	borderFlash: FlashTypes
 }
 
 const initialState: InitialStateType = {
@@ -24,6 +19,11 @@ const initialState: InitialStateType = {
 	positiveClicks: 0,
 	negativeClicks: 0, 
 	textFlash: {
+		plusOne: false,
+		plusTwo: false,
+		minusOne: false
+	},
+	borderFlash: {
 		plusOne: false,
 		plusTwo: false,
 		minusOne: false
@@ -47,6 +47,9 @@ const clickerSlice = createSlice({
 		},
 		setTextFlash: (state, action: PayloadAction<FlashTypes>) => {
 			state.textFlash = action.payload	
+		},
+		setBorderFlash: (state, action: PayloadAction<FlashTypes>) => {
+			state.borderFlash = action.payload
 		}
 	}
 })
@@ -56,7 +59,8 @@ export const {
 	setIsClickerDisabled, 
 	setPositiveClicks,
 	setNegativeClicks,
-	setTextFlash
+	setTextFlash,
+	setBorderFlash
 } = clickerSlice.actions
 
 export const clicker = clickerSlice.reducer

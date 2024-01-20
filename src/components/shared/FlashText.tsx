@@ -9,7 +9,7 @@ type PropType = {
 
 export const FlashText = ({text, shouldFlash, color}: PropType) => {
 	return (
-		<div className = {`transition-colors duration-500 ${shouldFlash ? color : 'text-black'} text-4xl`}>
+		<div className = {`transition-colors duration-300 ${shouldFlash ? color : 'text-black'} text-4xl`}>
 			{text}
 		</div>
 	)	
