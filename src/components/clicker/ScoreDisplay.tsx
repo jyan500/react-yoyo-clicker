@@ -2,7 +2,7 @@ import React from "react"
 import { useAppSelector } from "../../hooks/reduxHooks" 
 import { FlashText } from "../shared/FlashText" 
 import { styles, colorVariants } from "../../assets/styles" 
-import { getColor } from "../../helpers" 
+import { getColor } from "../../helpers/functions" 
 
 export const ScoreDisplay = () => {
 	const isClickerDisabled = useAppSelector((state) => state.clicker.isClickerDisabled)

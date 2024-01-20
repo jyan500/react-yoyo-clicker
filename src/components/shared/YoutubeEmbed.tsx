@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks"
 import { setYtVidId, setIsClickerDisabled } from "../../reducers/clicker" 
 import { borderVariants } from "../../assets/styles"
 import "../../assets/YoutubeEmbed.css"
-import { getColor } from "../../helpers"
+import { getColor } from "../../helpers/functions"
 import { FlashTypes } from "../../types/common" 
 
 type YoutubeEmbedProps = {

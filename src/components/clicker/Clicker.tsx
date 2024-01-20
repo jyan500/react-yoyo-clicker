@@ -17,7 +17,7 @@ import {
 	setBorderFlash,
 } from "../../reducers/clicker" 
 import type { FlashTypeKey, FlashTypes } from "../../types/common"
-import { getColor } from "../../helpers" 
+import { getColor } from "../../helpers/functions" 
 
 export const Clicker = () => {
 	const dispatch = useAppDispatch()
@@ -33,13 +33,26 @@ export const Clicker = () => {
 	const handleTextFlash = (type: FlashTypeKey) => {
 		dispatch(setTextFlash({...textFlash, [type]: true}))
 	    const id = setTimeout(() => {
-	    	dispatch(setTextFlash({...textFlash, [type]: false}))
+	    	// avoid race condition of pressing multiple keys at once by setting the flash
+	    	// to all things false
+	    	let allFalse = {...textFlash}
+	    	Object.keys(allFalse).forEach((key) => {
+	    		allFalse[key as FlashTypeKey] = false
+	    	})
+
+	    	dispatch(setTextFlash(allFalse))
 	    }, 300);
 	}
 	const handleBorderFlash = (type: FlashTypeKey) => {
 		dispatch(setBorderFlash({...borderFlash, [type]: true}))
 		const id = setTimeout(() => {
-			dispatch(setBorderFlash({...borderFlash, [type]: false}))
+	    	// avoid race condition of pressing multiple keys at once by setting the flash
+	    	// to all things false
+	    	let allFalse = {...borderFlash}
+	    	Object.keys(allFalse).forEach((key) => {
+	    		allFalse[key as FlashTypeKey] = false
+	    	})
+			dispatch(setBorderFlash(allFalse))
 		}, 300)
 	}
 
