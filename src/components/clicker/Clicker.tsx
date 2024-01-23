@@ -30,6 +30,14 @@ export const Clicker = () => {
 	const textFlash = useAppSelector((state) => state.clicker.textFlash)
 	const borderFlash = useAppSelector((state) => state.clicker.borderFlash)
 
+	const editScore = (scoreId: string) => {
+
+	}
+
+	const deleteScore = (scoreId: string) => {
+
+	}
+
 	const handleTextFlash = (type: FlashTypeKey) => {
 		dispatch(setTextFlash({...textFlash, [type]: true}))
 	    const id = setTimeout(() => {
@@ -105,6 +113,8 @@ export const Clicker = () => {
 			) : null}
 			<ScoreDisplay/>
 			<ScoreButtons/>
+			<ScoreForm />
+			<ScoreTable editScore={editScore} deleteScore={deleteScore}/>
 		</>
 	)	
 }

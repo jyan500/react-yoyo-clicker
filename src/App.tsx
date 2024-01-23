@@ -22,13 +22,13 @@ const App = () => {
 							<Routes>
 						    	<Route path = "/" element = {<Home/>}></Route>
 							</Routes>
-							<Footer/>
 						</div>
 					</div>
 					<div className = "w-64">
 						<SidePanel/>
 					</div>
 				</div>
+				<Footer/>
 			</Router>
 		</div>
 	);

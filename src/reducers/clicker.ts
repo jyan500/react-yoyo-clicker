@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "../store"
-import type { FlashTypes } from "../types/common" 
-
+import type { FlashTypes, ScoreForm } from "../types/common" 
 
 interface InitialStateType {
 	ytVidId: string
@@ -11,6 +10,8 @@ interface InitialStateType {
 	negativeClicks: number
 	textFlash: FlashTypes
 	borderFlash: FlashTypes
+	scores: Array<ScoreForm>
+	scoreForm: ScoreForm
 }
 
 const initialState: InitialStateType = {
@@ -27,6 +28,15 @@ const initialState: InitialStateType = {
 		plusOne: false,
 		plusTwo: false,
 		minusOne: false
+	},
+	scores: [],
+	scoreForm: {
+		id: "", 
+		judgeName: "", 
+		playerName: "", 
+		contestName: "", 
+		positiveClicks: 0, 
+		negativeClicks: 0
 	}
 }
 const clickerSlice = createSlice({
@@ -50,6 +60,12 @@ const clickerSlice = createSlice({
 		},
 		setBorderFlash: (state, action: PayloadAction<FlashTypes>) => {
 			state.borderFlash = action.payload
+		},
+		setScores: (state, action: PayloadAction<Array<ScoreForm>>) => {
+			state.scores = action.payload
+		},
+		setScoreForm: (state, action: PayloadAction<ScoreForm>) => {
+			state.scoreForm = action.payload	
 		}
 	}
 })
@@ -60,7 +76,9 @@ export const {
 	setPositiveClicks,
 	setNegativeClicks,
 	setTextFlash,
-	setBorderFlash
+	setBorderFlash,
+	setScores,
+	setScoreForm,
 } = clickerSlice.actions
 
 export const clicker = clickerSlice.reducer
