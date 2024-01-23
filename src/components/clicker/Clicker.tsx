@@ -65,38 +65,33 @@ export const Clicker = () => {
 	}
 
 	useKeyDown(() => {
-		handleTextFlash("plusOne")
-		handleBorderFlash("plusOne")
 		dispatch(setPositiveClicks(positiveClicks+1))
 		if (numberMode){
-			// showAndHidePlusOne()
+			handleTextFlash("plusOne")
 		}
 		if (borderMode){
-			// showAndHideBorder()
-			// setBorderColor("lime")
+			handleBorderFlash("plusOne")
 		}
 	}, ["f"], isClickerDisabled)
 
 	useKeyDown(() => {
-		handleTextFlash("minusOne")
-		handleBorderFlash("minusOne")
 		dispatch(setNegativeClicks(negativeClicks+1))
 		if (numberMode){
-			// showAndHideMinusOne()
+			handleTextFlash("minusOne")
 		}
 		if (borderMode){
-			// showAndHideBorder()
-			// setBorderColor("red")
+			handleBorderFlash("minusOne")
 		}
 	}, ["d"], isClickerDisabled)
 
 	useKeyDown(() => {
-		handleTextFlash("plusTwo")
-		handleBorderFlash("plusTwo")
+		if (numberMode){
+			handleTextFlash("plusTwo")
+		}
+		if (borderMode){
+			handleBorderFlash("plusTwo")
+		}
 		dispatch(setPositiveClicks(positiveClicks+2))
-		// showAndHidePlusTwo()
-		// showAndHideBorder()
-		// setBorderColor("sky")
 	}, ["g"], isClickerDisabled)
 
 	return (

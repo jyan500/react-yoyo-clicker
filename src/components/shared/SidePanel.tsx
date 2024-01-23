@@ -12,14 +12,22 @@ export const SidePanel = () => {
 	return (
 		<div className = "flex flex-col p-4">
 			<button onClick={() => setShowSettings(!showSettings)}><FaGear className = "w-8 h-8"/></button>
-			<div className = {`p-2 ${showSettings ? "visible" : "invisible"}`}>
-				<div className = "flex flex-row">
-					<label className = {styles.label}>Number Mode:</label>
-					<input type = "checkbox" checked = {numberMode} onChange = {() => dispatch(setNumberMode())}/>
+			<div className = {`p-2 transition-opacity delay-50 duration-200 ease-in-out ${showSettings ? "opacity-100" : "opacity-0"} border mt-4`}>
+				<div className="flex items-center mb-4">
+				    <input 
+					    onChange = {() => dispatch(setNumberMode())} 
+					    checked = {numberMode} 
+					    type="checkbox" 
+					    className={styles.checkbox}/>
+				    <label className={`${styles.label} ml-2`}>Number Mode</label>
 				</div>
-				<div className = "flex flex-row">
-					<label className = {styles.label}>Border Mode:</label>
-					<input type = "checkbox" checked = {borderMode} onChange = {() => dispatch(setBorderMode())}/>
+				<div className="flex items-center">
+				    <input 
+					    onChange = {() => dispatch(setBorderMode())} 
+					    checked = {borderMode} 
+					    type="checkbox" 
+					    className={styles.checkbox}/>
+				    <label className={`${styles.label} ml-2`}>Border Mode</label>
 				</div>
 			</div>
 		</div>
