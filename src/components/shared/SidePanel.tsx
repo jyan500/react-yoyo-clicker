@@ -11,7 +11,7 @@ export const SidePanel = () => {
 
 	return (
 		<div className = "flex flex-col p-4">
-			<button onClick={() => setShowSettings(!showSettings)}><FaGear className = {styles.icon}/></button>
+			<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>
 			<div className = {`p-2 transition-opacity delay-50 duration-200 ease-in-out ${showSettings ? "opacity-100" : "opacity-0"} border mt-4`}>
 				<div className="flex items-center mb-4">
 				    <input 

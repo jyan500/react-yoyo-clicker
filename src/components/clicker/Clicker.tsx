@@ -15,6 +15,8 @@ import {
 	setNegativeClicks,
 	setTextFlash,
 	setBorderFlash,
+	setScoreForm,
+	setScores,
 } from "../../reducers/clicker" 
 import type { FlashTypeKey, FlashTypes } from "../../types/common"
 import { getColor } from "../../helpers/functions" 
@@ -29,13 +31,18 @@ export const Clicker = () => {
 	const positiveClicks = useAppSelector((state) => state.clicker.positiveClicks)
 	const textFlash = useAppSelector((state) => state.clicker.textFlash)
 	const borderFlash = useAppSelector((state) => state.clicker.borderFlash)
+	const savedScores = useAppSelector((state) => state.clicker.scores)
+	const scoreForm = useAppSelector((state) => state.clicker.scoreForm)
 
 	const editScore = (scoreId: string) => {
-
+		const score = savedScores.find((score)=>score.id === scoreId)
+		if (score){
+			dispatch(setScoreForm(score))
+		}
 	}
 
 	const deleteScore = (scoreId: string) => {
-
+		dispatch(setScores(savedScores.filter(score => score.id !== scoreId)))
 	}
 
 	const handleTextFlash = (type: FlashTypeKey) => {
