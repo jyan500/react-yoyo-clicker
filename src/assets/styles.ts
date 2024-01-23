@@ -4,8 +4,8 @@
  **/
 export const buttonTheme = (color: string) => {
 	const themes: Record<string, string> = {
-		"red": "bg-red-500 hover:bg-red-400",	
-		"blue": "bg-blue-500 hover:bg-blue-400",
+		"red": "bg-red-500 hover:opacity-70",	
+		"blue": "bg-blue-500 hover:opacity-70",
 	}
 	return `${themes[color]} text-white`
 }
@@ -38,5 +38,6 @@ export const styles: Record<string, string> = {
 	"textInput": `bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white ${textFocus("blue")}`,
 	"label": "block font-bold mb-1 md:mb-0",
 	"verticalLabel": "block font-bold",
-	"checkbox": "w-4 h-4 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
+	"checkbox": "w-4 h-4 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600",
+	"icon": "w-8 h-8 hover:opacity-60"
 }
