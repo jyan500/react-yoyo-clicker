@@ -3,7 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks"
 import { setIsClickerDisabled, setPositiveClicks, setNegativeClicks } from "../../reducers/clicker" 
 import { styles, buttonTheme } from "../../assets/styles" 
 
-export const ScoreButtons = () => {
+type Props = {
+	downloadExcel: () => void
+}
+export const ScoreButtons = ({downloadExcel}: Props) => {
 	const dispatch = useAppDispatch()
 	const defaultButton = `${styles.button} ${buttonTheme("blue")}`
 	const isClickerDisabled = useAppSelector((state) => state.clicker.isClickerDisabled)
@@ -22,7 +25,7 @@ export const ScoreButtons = () => {
 				dispatch(setNegativeClicks(0))
 			}}>Reset
 			</button>
-			{/*<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>*/}
+			<button className = {defaultButton} onClick = {() => downloadExcel()}>Download Scores</button>
 		</div>
 	)	
 }

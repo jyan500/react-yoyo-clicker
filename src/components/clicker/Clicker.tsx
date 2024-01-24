@@ -20,6 +20,7 @@ import {
 } from "../../reducers/clicker" 
 import type { FlashTypeKey, FlashTypes } from "../../types/common"
 import { getColor } from "../../helpers/functions" 
+import {utils, writeFile} from "xlsx";
 
 export const Clicker = () => {
 	const dispatch = useAppDispatch()
@@ -108,6 +109,26 @@ export const Clicker = () => {
 		dispatch(setPositiveClicks(positiveClicks+2))
 	}, [plusTwoKey], isClickerDisabled)
 
+	const downloadExcel = () => {
+		const colWidth = [...Array(5)].map((_, i) => {
+			return {width: 30}
+		});
+		const data = savedScores.map((score) => {
+			return {
+				"Judge": score.judgeName, 
+				"Contest": score.contestName, 
+				"Player": score.playerName, 
+				"Positive Clicks": `+${score.positiveClicks.toString()}`, 
+				"Negative Clicks": `-${score.negativeClicks.toString()}`, 
+			}		
+		})
+		const worksheet = utils.json_to_sheet(data)	
+		worksheet["!cols"] = colWidth
+		const workbook = utils.book_new()
+		utils.book_append_sheet(workbook, worksheet, "Sheet1")
+		writeFile(workbook, "score-sheet.xlsx")
+	}
+
 	return (
 		<>
 			<YoutubeForm/>	
@@ -121,7 +142,7 @@ export const Clicker = () => {
 				/>
 			) : null}
 			<ScoreDisplay/>
-			<ScoreButtons/>
+			<ScoreButtons downloadExcel={downloadExcel}/>
 			<ScoreForm />
 			<ScoreTable editScore={editScore} deleteScore={deleteScore}/>
 		</>
