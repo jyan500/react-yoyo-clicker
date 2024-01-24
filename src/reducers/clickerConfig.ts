@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "../store"
 
-interface initialStateType {
+export interface initialStateType {
 	numberMode: boolean,
 	borderMode: boolean,
 	plusOneKey: string,
@@ -21,15 +21,24 @@ const clickerConfigSlice = createSlice({
 	name: "clickerConfig",
 	initialState,
 	reducers: {
-		setBorderMode: (state) => {
-			state.borderMode = !state.borderMode
+		setBorderMode: (state, action: PayloadAction<boolean>) => {
+			state.borderMode = action.payload
 		},	
-		setNumberMode: (state) => {
-			state.numberMode = !state.numberMode
+		setNumberMode: (state, action: PayloadAction<boolean>) => {
+			state.numberMode = action.payload
+		},
+		setPlusOneKey: (state, action: PayloadAction<string>) => {
+			state.plusOneKey = action.payload
+		},
+		setPlusTwoKey: (state, action: PayloadAction<string>) => {
+			state.plusTwoKey = action.payload	
+		},
+		setMinusOneKey: (state, action: PayloadAction<string>) => {
+			state.minusOneKey = action.payload
 		}
 	}
 })
 
-export const { setBorderMode, setNumberMode } = clickerConfigSlice.actions
+export const { setBorderMode, setNumberMode, setPlusOneKey, setMinusOneKey, setPlusTwoKey } = clickerConfigSlice.actions
 
 export const clickerConfig = clickerConfigSlice.reducer

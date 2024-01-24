@@ -16,7 +16,7 @@ interface InitialStateType {
 
 const initialState: InitialStateType = {
 	ytVidId: "",
-	isClickerDisabled: false,
+	isClickerDisabled: true,
 	positiveClicks: 0,
 	negativeClicks: 0, 
 	textFlash: {

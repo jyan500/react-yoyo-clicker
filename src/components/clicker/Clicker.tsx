@@ -23,16 +23,23 @@ import { getColor } from "../../helpers/functions"
 
 export const Clicker = () => {
 	const dispatch = useAppDispatch()
-	const ytVidId = useAppSelector((state) => state.clicker.ytVidId)
-	const numberMode = useAppSelector((state) => state.clickerConfig.numberMode)
-	const borderMode = useAppSelector((state) => state.clickerConfig.borderMode)
-	const isClickerDisabled = useAppSelector((state) => state.clicker.isClickerDisabled)
-	const negativeClicks = useAppSelector((state) => state.clicker.negativeClicks)
-	const positiveClicks = useAppSelector((state) => state.clicker.positiveClicks)
-	const textFlash = useAppSelector((state) => state.clicker.textFlash)
-	const borderFlash = useAppSelector((state) => state.clicker.borderFlash)
-	const savedScores = useAppSelector((state) => state.clicker.scores)
-	const scoreForm = useAppSelector((state) => state.clicker.scoreForm)
+	const {
+		ytVidId, 
+		isClickerDisabled, 
+		negativeClicks, 
+		positiveClicks,
+		textFlash, 
+		borderFlash, 
+		scores: savedScores, 
+		scoreForm
+	} = useAppSelector((state) => state.clicker)
+	const {
+		borderMode, 
+		numberMode, 
+		plusOneKey, 
+		minusOneKey, 
+		plusTwoKey
+	} = useAppSelector((state) => state.clickerConfig)
 
 	const editScore = (scoreId: string) => {
 		const score = savedScores.find((score)=>score.id === scoreId)
@@ -79,7 +86,7 @@ export const Clicker = () => {
 		if (borderMode){
 			handleBorderFlash("plusOne")
 		}
-	}, ["f"], isClickerDisabled)
+	}, [plusOneKey], isClickerDisabled)
 
 	useKeyDown(() => {
 		dispatch(setNegativeClicks(negativeClicks+1))
@@ -89,7 +96,7 @@ export const Clicker = () => {
 		if (borderMode){
 			handleBorderFlash("minusOne")
 		}
-	}, ["d"], isClickerDisabled)
+	}, [minusOneKey], isClickerDisabled)
 
 	useKeyDown(() => {
 		if (numberMode){
@@ -99,7 +106,7 @@ export const Clicker = () => {
 			handleBorderFlash("plusTwo")
 		}
 		dispatch(setPositiveClicks(positiveClicks+2))
-	}, ["g"], isClickerDisabled)
+	}, [plusTwoKey], isClickerDisabled)
 
 	return (
 		<>

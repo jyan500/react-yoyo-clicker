@@ -2,6 +2,7 @@ import React, {useState} from "react"
 import { buttonTheme, styles } from "../../assets/styles" 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks"
 import { setYtVidId, setIsClickerDisabled } from "../../reducers/clicker" 
+import { AutoDisabledInput as Input } from "../shared/AutoDisabledInput" 
 
 export const YoutubeForm = () => {
 	const [showUrlError, setShowUrlError] = useState(false)
@@ -29,10 +30,7 @@ export const YoutubeForm = () => {
 		<div className = "mb-6">
 			<label className = {styles.verticalLabel}>Please paste youtube link for the freestyle below</label>	
 			<label className = "text-xs">** Currently, Youtube Shorts are <b>not</b> supported</label>
-			<input value = {ytVidLink} 
-				onFocus = {(e) => {
-					dispatch(setIsClickerDisabled(true))}} 
-				onBlur = {(e) => {dispatch(setIsClickerDisabled(false))}} 
+			<Input value = {ytVidLink} 
 				onChange = {(e) => setYtVidLink(e.target.value)} 
 				className = {styles.textInput + " mb-4 w-full"}
 			/>

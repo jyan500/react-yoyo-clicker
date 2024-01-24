@@ -3,10 +3,11 @@ import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks"
 import { setIsClickerDisabled, setScores, setScoreForm } from "../../reducers/clicker" 
 import { styles, buttonTheme } from "../../assets/styles" 
 import { ScoreForm as ScoreFormType } from "../../types/common" 
+import { AutoDisabledInput as Input } from "../shared/AutoDisabledInput" 
 import {v4 as uuidv4} from "uuid"
 export const ScoreForm = () => {
 	const dispatch = useAppDispatch()
-	const savedScores = useAppSelector((state)=>state.clicker.scores)
+	const {scores: savedScores, scoreForm: form} = useAppSelector((state) => state.clicker)	
 	const defaultButton = `${styles.button} ${buttonTheme("blue")}`
 	const defaultForm = {
 		id: "",
@@ -16,7 +17,6 @@ export const ScoreForm = () => {
 		positiveClicks: 0, 
 		negativeClicks: 0
 	}
-	const form = useAppSelector((state) => state.clicker.scoreForm)
 	const [formErrors, setFormErrors] = useState({
 		judgeName: {"text": "Judge's Name is required", "show": false},
 		playerName: {"text": "Player's Name is required", "show": false},
@@ -78,10 +78,8 @@ export const ScoreForm = () => {
 						      </label>
 						    </div>
 						    <div className="md:w-2/3">
-						      <input className={styles.textInput}
+						      <Input className={styles.textInput}
 							    id="inline-full-name" 
-							    onFocus = {(e) => {dispatch(setIsClickerDisabled(true))}} 
-							    onBlur = {(e) => {dispatch(setIsClickerDisabled(false))}} 
 							    onChange={(e) => dispatch(setScoreForm({...form, [t.key]: e.target.value}))}
 							    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
 							    value={formVal}
@@ -95,7 +93,6 @@ export const ScoreForm = () => {
 			<div className = "flex flex-row justify-center items-center">
 				<button onClick = {submitForm} className = {defaultButton}>Save</button>
 				<button onClick = {() => {
-					dispatch(setIsClickerDisabled(false)) 
 					dispatch(setScoreForm(defaultForm))
 				}}  className = {defaultButton}>Clear</button>
 			</div>

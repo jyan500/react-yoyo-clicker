@@ -5,10 +5,12 @@ import { styles, colorVariants } from "../../assets/styles"
 import { getColor } from "../../helpers/functions" 
 
 export const ScoreDisplay = () => {
-	const isClickerDisabled = useAppSelector((state) => state.clicker.isClickerDisabled)
-	const positiveClicks = useAppSelector((state) => state.clicker.positiveClicks)
-	const negativeClicks = useAppSelector((state) => state.clicker.negativeClicks)
-	const textFlash = useAppSelector((state) => state.clicker.textFlash)
+	const {
+		isClickerDisabled, 
+		positiveClicks, 
+		negativeClicks, 
+		textFlash
+	} = useAppSelector((state) => state.clicker)
 	return (
 		<div className = "flex flex-row justify-center items-center">
 			<div className = {`${styles.label} ${isClickerDisabled ? "opacity-50": ""} flex flex-col justify-center items-center p-2`}>
