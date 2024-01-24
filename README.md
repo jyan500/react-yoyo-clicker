@@ -27,10 +27,12 @@ search bar and click "Submit".
 
 2. Once the youtube video has loaded in the embed, you can start the video and begin scoring.
 
-3. Press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click
+3. Press "Start" to begin the clicker session.
 
-4. After scoring, click "Input Score" to input your scores in the form that should appear below the clicker scores.
+4. Press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click
 
-5. After inputting your scores, you can save and view all the scores that you've submitted.
+5. After scoring, Press "End" to end the clicker session. 
 
-6. You can also download all the inputted scores in .xlsx format by clicking the "Download Scores" button
+6. You can input your scores in the form below the clicker scores, and press "Save" to make them display in the table.
+
+7. You can also download all the inputted scores in .xlsx format by clicking the "Download Scores" button
