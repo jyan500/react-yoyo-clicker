@@ -59,7 +59,7 @@ export const ScoreForm = () => {
 		isEditing ? dispatch(setScores(savedScores.map((score) => score.id === tempForm.id ? tempForm : score))) : dispatch(setScores([...savedScores, tempForm]))
 	}
 	return (
-		<div className = "flex flex-col p-4">
+		<div className = "flex flex-col">
 			{
 				[
 					{key: "judgeName", text: "Judge Name"}, 
@@ -71,26 +71,22 @@ export const ScoreForm = () => {
 					const formVal = form[t.key as keyof typeof form]
 					const formErrorVal = formErrors[t.key as keyof typeof formErrors]
 					return (
-						<div className="md:flex md:items-center mb-4">
-						    <div className="md:w-1/3">
-						      <label className={`${styles.label} text-right mr-4`}>
-						      {t.text}
-						      </label>
-						    </div>
-						    <div className="md:w-2/3">
-						      <Input className={styles.textInput}
-							    id="inline-full-name" 
-							    onChange={(e) => dispatch(setScoreForm({...form, [t.key]: e.target.value}))}
-							    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
-							    value={formVal}
-							  />
-							  <span className = {`${formErrorVal?.show ? "visible": "hidden"} font-bold text-red-500`}>{formErrorVal?.text}</span>
-						    </div>
+						<div className="md:flex flex-col mt-2 mb-2">
+					      <label className={`${styles.label}`}>
+					      {t.text}
+					      </label>
+					      <Input className={styles.textInput}
+						    id="inline-full-name" 
+						    onChange={(e) => dispatch(setScoreForm({...form, [t.key]: e.target.value}))}
+						    type={t.key === "positiveClicks" || t.key === "negativeClicks" ? "number" : "text"} 
+						    value={formVal}
+						  />
+						  <span className = {`${formErrorVal?.show ? "visible": "hidden"} font-bold text-red-500`}>{formErrorVal?.text}</span>
 					    </div>
 					)	
 				})
 			}
-			<div className = "flex flex-row justify-center items-center">
+			<div className = "flex flex-row p-4 justify-center items-center">
 				<button onClick = {submitForm} className = {defaultButton}>Save</button>
 				<button onClick = {() => {
 					dispatch(setScoreForm(defaultForm))

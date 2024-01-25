@@ -27,19 +27,21 @@ export const YoutubeForm = () => {
 	}
 	const defaultButton = `${buttonTheme("blue")} ${styles.button}`
 	return (
-		<div className = "mb-6">
+		<div>
 			<label className = {styles.verticalLabel}>Please paste youtube link for the freestyle below</label>	
 			<label className = "text-xs">** Currently, Youtube Shorts are <b>not</b> supported</label>
 			<Input value = {ytVidLink} 
 				onChange = {(e) => setYtVidLink(e.target.value)} 
-				className = {styles.textInput + " mb-4 w-full"}
+				className = {`${styles.textInput}`}
 			/>
-			<button onClick = {() => parseVidLink()} className = {defaultButton}>Submit</button>
+			<div className = "p-4 flex flex-row justify-center items-center">
+				<button onClick = {() => parseVidLink()} className = {defaultButton}>Submit</button>
 				<button className = {defaultButton} onClick = {() => {
-					setYtVidLink("") 
-					setShowUrlError(false)
-					dispatch(setYtVidId(""))
-				}}>Clear</button>
+						setYtVidLink("") 
+						setShowUrlError(false)
+						dispatch(setYtVidId(""))
+					}}>Clear</button>
+			</div>
 			<p className = {`${styles.label} ${showUrlError ? "visible": "hidden"}`}>Please type in valid youtube URL</p>
 		</div>
 	)

@@ -7,7 +7,7 @@ import { Clicker } from "../../clicker/Clicker"
 export const Home = () => {
 	return (
 		<div className = "flex flex-col justify-center items-center h-full">
-			<div className = "p-2 mb-6">			
+			<div className = "p-4 mb-6">			
 				<h1 className = "font-bold text-6xl">Yoyo Clicker</h1>
 			</div>
 			<Clicker/>

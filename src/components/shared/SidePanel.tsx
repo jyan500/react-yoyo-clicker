@@ -46,22 +46,22 @@ export const SidePanel = () => {
 	return (
 		<div className = "flex flex-col p-4">
 			<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>
-			<div className = {`p-2 transition-opacity delay-50 duration-200 ease-in-out ${showSettings ? "opacity-100" : "opacity-0"} border mt-4`}>
-				<div className="flex items-center mt-2 mb-2">
+			<div className = {`mt-4 p-4 transition-opacity delay-50 duration-200 ease-in-out ${showSettings ? "opacity-100" : "opacity-0"} border`}>
+				<div className="flex flex-col mt-2 mb-2">
+				    <label className={`${styles.label}`}>Number Mode</label>
 				    <input 
 					    onChange = {(e) => setTempNumberMode(e.target.checked)} 
 					    checked = {clickerConfig.numberMode} 
 					    type="checkbox" 
 					    className={styles.checkbox}/>
-				    <label className={`${styles.label} ml-2`}>Number Mode</label>
 				</div>
-				<div className="flex items-center mt-2 mb-2">
+				<div className="flex flex-col mt-2 mb-2">
+				    <label className={`${styles.label}`}>Border Mode</label>
 				    <input 
 					    onChange = {(e) => setTempBorderMode(e.target.checked)} 
 					    checked = {clickerConfig.borderMode} 
 					    type="checkbox" 
 					    className={styles.checkbox}/>
-				    <label className={`${styles.label} ml-2`}>Border Mode</label>
 				</div>
 				<div className = "mt-2 mb-2">
 					<label className={styles.label}>Update Key Bindings</label>	
@@ -74,13 +74,13 @@ export const SidePanel = () => {
 					{type: "Plus Two Key", value: "plusTwoKey"}, 
 					{type: "Minus One Key", value: "minusOneKey"}].map((keyType) => {
 						return (
-							<div className = "flex items-center mt-2 mb-2">
+							<div className = "flex flex-col mt-2 mb-2">
+							    <label className={`${styles.label}`}>{keyType.type}</label>
 								<Input 
 								maxLength={1}
 								onChange = {(e) => {
 									setTempKeys({...tempKeys, [keyType.value]: e.target.value})}
 								} className = {`${styles.textInput} w-1/4`} value = {tempKeys[keyType.value as keyof typeof defaultTempKeys]}/>
-							    <label className={`${styles.label} ml-2`}>{keyType.type}</label>
 						    </div>
 						)
 				})}

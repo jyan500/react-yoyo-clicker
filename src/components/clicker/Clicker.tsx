@@ -131,20 +131,34 @@ export const Clicker = () => {
 
 	return (
 		<>
-			<YoutubeForm/>	
-			<ScoreInstructions/>
-			{ ytVidId !== "" ? (
-				<YoutubeEmbed 
-					ytVidId = {ytVidId} 
-					shouldFlash = {borderFlash.plusOne || borderFlash.plusTwo || borderFlash.minusOne} 
-					isBorderMode = {true}
-					borderColor = {getColor("border", borderFlash)} 
-				/>
-			) : null}
-			<ScoreDisplay/>
-			<ScoreButtons downloadExcel={downloadExcel}/>
-			<ScoreForm />
-			<ScoreTable editScore={editScore} deleteScore={deleteScore}/>
+			<div className = "p-4">
+				<YoutubeForm/>	
+			</div>
+			<div className = "p-4">
+				<ScoreInstructions/>
+			</div>
+			<div className = "p-4 flex justify-center w-full">
+				{ ytVidId !== "" ? (
+					<YoutubeEmbed 
+						ytVidId = {ytVidId} 
+						shouldFlash = {borderFlash.plusOne || borderFlash.plusTwo || borderFlash.minusOne} 
+						isBorderMode = {true}
+						borderColor = {getColor("border", borderFlash)} 
+					/>
+				) : null}
+			</div>
+			<div className = "p-4">
+				<ScoreDisplay/>
+			</div>
+			<div className = "p-4">
+				<ScoreButtons downloadExcel={downloadExcel}/>
+			</div>
+			<div className = "p-4 w-full">
+				<ScoreForm />
+			</div>
+			<div className = "p-4 w-full">
+				<ScoreTable editScore={editScore} deleteScore={deleteScore}/>
+			</div>
 		</>
 	)	
 }

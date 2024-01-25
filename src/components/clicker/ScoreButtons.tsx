@@ -11,7 +11,7 @@ export const ScoreButtons = ({downloadExcel}: Props) => {
 	const defaultButton = `${styles.button} ${buttonTheme("blue")}`
 	const isClickerDisabled = useAppSelector((state) => state.clicker.isClickerDisabled)
 	return (
-		<div className = "flex flex-row mb-6 justify-center items-center">
+		<div className = "flex flex-row justify-center items-center">
 			<button className = {defaultButton} onClick = {() => {
 				if (isClickerDisabled){
 					dispatch(setIsClickerDisabled(false))

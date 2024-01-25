@@ -20,14 +20,12 @@ export const YoutubeEmbed = (
 	}: YoutubeEmbedProps
 ) => {
 	return (
-		<div className = "flex justify-center w-full">
-		    <iframe
-		    	className={`transition-colors duration-300 border-8 ${(isBorderMode && shouldFlash && borderColor) ? borderColor : "border-transparent"} video`}
-			    src={`https://www.youtube.com/embed/${ytVidId}`}
-			    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-			    allowFullScreen
-			    title="Embedded youtube"
-		    />
-	    </div>
+	    <iframe
+	    	className={`transition-colors duration-300 border-8 ${(isBorderMode && shouldFlash && borderColor) ? borderColor : "border-transparent"} video`}
+		    src={`https://www.youtube.com/embed/${ytVidId}`}
+		    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+		    allowFullScreen
+		    title="Embedded youtube"
+	    />
 	)
 }
