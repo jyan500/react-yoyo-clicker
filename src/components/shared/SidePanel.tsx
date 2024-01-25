@@ -11,10 +11,14 @@ type InitialStateTypeSubset = {
   [K in InputKeys]: initialStateType;
 };
 
-export const SidePanel = () => {
+type Props = {
+	showSettings: boolean 
+	setShowSettingsPanel: (showSettings: boolean) => void
+}
+
+export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}: Props) => {
 	const clickerConfig = useAppSelector((state) => state.clickerConfig)
 	const dispatch = useAppDispatch()
-	const [showSettings, setShowSettings] = useState(false)
 	const [tempNumberMode, setTempNumberMode] = useState(clickerConfig.numberMode)
 	const [tempBorderMode, setTempBorderMode] = useState(clickerConfig.borderMode)
 	const [isKeyBindingError, setIsKeyBindingError] = useState(false) 
@@ -45,7 +49,7 @@ export const SidePanel = () => {
 	}
 	return (
 		<div className = "flex flex-col p-4">
-			<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>
+		{/*	<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>*/}
 			<div className = {`mt-4 p-4 transition-opacity delay-50 duration-200 ease-in-out ${showSettings ? "opacity-100" : "opacity-0"} border`}>
 				<div className="flex flex-col mt-2 mb-2">
 				    <label className={`${styles.label}`}>Number Mode</label>
