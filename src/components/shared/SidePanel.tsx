@@ -48,9 +48,14 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 		setShowSettings(false)
 	}
 	return (
-		<div className = "flex flex-col p-4">
-		{/*	<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>*/}
-			<div className = {`mt-4 p-4 transition-opacity delay-50 duration-200 ease-in-out ${showSettings ? "opacity-100" : "opacity-0"} border`}>
+		/* Slide open from the right side, hence the -translate-x-0*/
+		<div className = {`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform ${showSettings ? '-translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out`}>
+			<div>
+				<button onClick={() => {setShowSettings(false)}} className="p-4 focus:outline-none">
+					Close
+				</button>
+			</div>
+			<div className = "p-4">
 				<div className="flex flex-col mt-2 mb-2">
 				    <label className={`${styles.label}`}>Number Mode</label>
 				    <input 
@@ -67,7 +72,7 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 					    type="checkbox" 
 					    className={styles.checkbox}/>
 				</div>
-				<div className = "mt-2 mb-2">
+				<div className = "mt-4 mb-4 border-b-2 border-white">
 					<label className={styles.label}>Update Key Bindings</label>	
 					<p className = {`${isKeyBindingError ? "visible": "hidden"} ${styles.text} ${colorVariants.red}`}>
 						Key Bindings Must Be Unique
@@ -84,11 +89,11 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 								maxLength={1}
 								onChange = {(e) => {
 									setTempKeys({...tempKeys, [keyType.value]: e.target.value})}
-								} className = {`${styles.textInput} w-1/4`} value = {tempKeys[keyType.value as keyof typeof defaultTempKeys]}/>
+								} className = {`${styles.textInputDark} w-1/4`} value = {tempKeys[keyType.value as keyof typeof defaultTempKeys]}/>
 						    </div>
 						)
 				})}
-				<div><button onClick = {onSubmit} className = {defaultButton}>Save</button></div>
+				<div className = "mt-4"><button onClick = {onSubmit} className = {defaultButton}>Save</button></div>
 			</div>
 		</div>
 	)

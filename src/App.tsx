@@ -21,20 +21,20 @@ const App = () => {
 		<div>
 			<Router>
 				<div className = "flex flex-col">
-					<div className = "flex flex-row border-b-2 border-gray-100 p-6">
-						<div className = "w-64 flex items-center">
+					<div className = "w-full flex flex-row border-b-2 border-gray-100 p-6">
+						<div className = "flex items-center">
 							<HamburgerButton/>
 						</div>
 						<div className = "flex-1">
 							<div className = "flex justify-center items-center">
-								<p className = "font-bold text-6xl">Yoyo Clicker</p>
+								<h1 className = "font-bold text-6xl text-center">Yoyo Clicker</h1>
 							</div>
 						</div>
-						<div className = "w-64 flex justify-end p-4 items-center">
+						<div className = "flex justify-end p-4 items-center">
 							<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>
 						</div>
 					</div>
-					<div className = "flex flex-row">
+					<div className = "w-full flex flex-row">
 						<div className = "w-64">
 							<SideBar/>
 						</div>
