@@ -1,3 +1,4 @@
+/* Currently Unused, see SidePanel.tsx */
 import React from 'react';
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks" 
 import { toggleSideBar } from "../../reducers/sideBar" 

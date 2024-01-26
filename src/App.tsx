@@ -23,7 +23,8 @@ const App = () => {
 				<div className = "flex flex-col">
 					<div className = "w-full flex flex-row border-b-2 border-gray-100 p-6">
 						<div className = "flex items-center">
-							<HamburgerButton/>
+							<button className = "flex" onClick={() => setShowSettings(!showSettings)}><FaGear className = {styles.icon}/></button>
+							{/*<HamburgerButton/>*/}
 						</div>
 						<div className = "flex-1">
 							<div className = "flex justify-center items-center">
@@ -31,12 +32,11 @@ const App = () => {
 							</div>
 						</div>
 						<div className = "flex justify-end p-4 items-center">
-							<button className = "flex justify-end" onClick={() => setShowSettings(!showSettings)}><FaGear className = {`${styles.icon}`}/></button>
 						</div>
 					</div>
 					<div className = "w-full flex flex-row">
 						<div className = "w-64">
-							<SideBar/>
+							<SidePanel showSettings = {showSettings} setShowSettingsPanel={setShowSettingsPanel}/>
 						</div>
 						<div className = "flex-1">
 							<div>
@@ -46,7 +46,6 @@ const App = () => {
 							</div>
 						</div>
 						<div className = "w-64">
-							<SidePanel showSettings = {showSettings} setShowSettingsPanel={setShowSettingsPanel}/>
 						</div>
 					</div>
 				</div>

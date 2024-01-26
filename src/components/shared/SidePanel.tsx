@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks"
 import { initialStateType, setNumberMode, setBorderMode, setPlusOneKey, setMinusOneKey, setPlusTwoKey } from "../../reducers/clickerConfig" 
 import { AutoDisabledInput as Input } from "./AutoDisabledInput" 
 import { styles, colorVariants, buttonTheme } from "../../assets/styles" 
+import { IoMdClose } from "react-icons/io";
 
 
 type InputKeys = "minusOneKey" | "plusOneKey" | "plusTwoKey"
@@ -49,13 +50,15 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 	}
 	return (
 		/* Slide open from the right side, hence the -translate-x-0*/
-		<div className = {`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform ${showSettings ? '-translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out`}>
-			<div>
-				<button onClick={() => {setShowSettings(false)}} className="p-4 focus:outline-none">
-					Close
+		/* sliding from left to right, left-0, from translate-x-0' to '-translate-x-full*/ 
+		/* sliding from right to left, right-0, from -translate-x-0' to 'translate-x-full*/ 
+		<div className = {`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${showSettings ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
+			<div className = "h-28 flex items-center mr-2 ml-2 border-b-2 border-gray-100">
+				<button onClick={() => {setShowSettings(false)}} className="flex items-center focus:outline-none">
+					<IoMdClose className = "w-10 h-10 hover:opacity-60"/>
 				</button>
 			</div>
-			<div className = "p-4">
+			<div className = "mr-2 ml-2">
 				<div className="flex flex-col mt-2 mb-2">
 				    <label className={`${styles.label}`}>Number Mode</label>
 				    <input 
