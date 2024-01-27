@@ -3,7 +3,7 @@ import { FaGear } from "react-icons/fa6";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks" 
 import { initialStateType, setNumberMode, setBorderMode, setPlusOneKey, setMinusOneKey, setPlusTwoKey } from "../../reducers/clickerConfig" 
 import { AutoDisabledInput as Input } from "./AutoDisabledInput" 
-import { styles, colorVariants, buttonTheme } from "../../assets/styles" 
+import { styles, colorVariants, buttonTheme, zIndices } from "../../assets/styles" 
 import { IoMdClose } from "react-icons/io";
 
 
@@ -52,7 +52,7 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 		/* Slide open from the right side, hence the -translate-x-0*/
 		/* sliding from left to right, left-0, from translate-x-0' to '-translate-x-full*/ 
 		/* sliding from right to left, right-0, from -translate-x-0' to 'translate-x-full*/ 
-		<div className = {`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${showSettings ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
+		<div className = {`${zIndices.SIDEBAR} fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${showSettings ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
 			<div className = "h-28 flex items-center mr-4 ml-4 border-b-2 border-gray-100">
 				<button onClick={() => {setShowSettings(false)}} className="flex items-center focus:outline-none">
 					<IoMdClose className = "w-10 h-10 hover:opacity-60"/>

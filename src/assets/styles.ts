@@ -42,3 +42,8 @@ export const styles: Record<string, string> = {
 	"checkbox": "w-4 h-4 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600",
 	"icon": "w-8 h-8 hover:opacity-60"
 }
+
+export const zIndices: Record<string, string> = {
+	"SIDEBAR": "z-40",
+	"HEADER": "z-30",
+}

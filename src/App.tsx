@@ -22,7 +22,7 @@ const App = () => {
 			<Router>
 				<div className = "relative flex flex-col">
 					<Header setShowSettings = {setShowSettings} showSettings = {showSettings}/>	
-					<div className = "z-0 mt-40 w-full flex flex-row">
+					<div className = "mt-40 w-full flex flex-row">
 						<div className = "w-64">
 							<SidePanel showSettings = {showSettings} setShowSettingsPanel={setShowSettingsPanel}/>
 						</div>
