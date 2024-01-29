@@ -20,22 +20,38 @@ export const ScoreForm = () => {
 	const [formErrors, setFormErrors] = useState({
 		judgeName: {"text": "Judge's Name is required", "show": false},
 		playerName: {"text": "Player's Name is required", "show": false},
-		contestName: {"text": "Contest Name is required", "show": false}
+		contestName: {"text": "Contest Name is required", "show": false},
+		positiveClicks: {"text": "Positive Clicks is required", "show": false},
+		negativeClicks: {"text": "Positive Clicks is required", "show": false}
 	})
 	const validateForm = () => {
 		let valid = true
 		let keys = Object.keys(formErrors)
 		Object.keys(form).forEach((key) => {
-			// show the errors specifically for Judge Name, Player Name and Contest Name
-			if (keys.includes(key) && form[key as keyof typeof form] === ""){
+			const blankStringField = (key === "judgeName" || key === "playerName" || key === "contestName") && form[key as keyof typeof form] === ""
+			const blankNumberField = (key === "positiveClicks" || key === "negativeClicks") && form[key as keyof typeof form] === ""
+			console.log("blankStringField: ", blankStringField)
+			console.log("blankNumberField: ", blankNumberField)
+			if (keys.includes(key) && (blankStringField || blankNumberField)){
 				setFormErrors((errors) => {
 					return {...errors, [key]: {...errors[key as keyof typeof formErrors], show: true}}
 				})
 				valid = false
 			}
 		})
-	return valid	
+		return valid	
 	}
+	const clearForm = () => {
+		// set form errors
+		dispatch(setScoreForm(defaultForm))
+		// clear any form errors
+		Object.keys(form).forEach((key) => {
+			setFormErrors((errors) => {
+				return {...errors, [key]: {...errors[key as keyof typeof formErrors], show: false}}
+			})
+		})
+	}
+
 	const submitForm = () => {
 		if (!validateForm()){
 			return	
@@ -57,6 +73,7 @@ export const ScoreForm = () => {
 		// TODO: parse out leading zeroes
 		dispatch(setScoreForm(tempForm))
 		isEditing ? dispatch(setScores(savedScores.map((score) => score.id === tempForm.id ? tempForm : score))) : dispatch(setScores([...savedScores, tempForm]))
+		clearForm()
 	}
 	return (
 		<div className = "flex flex-col">
@@ -88,9 +105,7 @@ export const ScoreForm = () => {
 			}
 			<div className = "flex flex-row p-4 justify-center items-center">
 				<button onClick = {submitForm} className = {defaultButton}>Save</button>
-				<button onClick = {() => {
-					dispatch(setScoreForm(defaultForm))
-				}}  className = {defaultButton}>Clear</button>
+				<button onClick = {clearForm} className = {defaultButton}>Clear</button>
 			</div>
 		</div>
 	)	
