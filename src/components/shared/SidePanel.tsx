@@ -65,7 +65,7 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 				    <label className={`${styles.label}`}>Number Mode</label>
 				    <input 
 					    onChange = {(e) => setTempNumberMode(e.target.checked)} 
-					    checked = {clickerConfig.numberMode} 
+					    checked = {tempNumberMode} 
 					    type="checkbox" 
 					    className={styles.checkbox}/>
 				</div>
@@ -73,7 +73,7 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 				    <label className={`${styles.label}`}>Border Mode</label>
 				    <input 
 					    onChange = {(e) => setTempBorderMode(e.target.checked)} 
-					    checked = {clickerConfig.borderMode} 
+					    checked = {tempBorderMode} 
 					    type="checkbox" 
 					    className={styles.checkbox}/>
 				</div>
