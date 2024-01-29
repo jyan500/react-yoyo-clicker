@@ -29,10 +29,17 @@ search bar and click "Submit".
 
 3. Press "Start" to begin the clicker session.
 
-4. Press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click
+4. On PC, press "F" for +1 click, "G" for +2 clicks, and "D" for -1 click. On Mobile, you should see two buttons, +1 and -1, which can be pressed to increment clicks instead of using the keyboard for convenience.
 
 5. After scoring, Press "End" to end the clicker session. 
 
 6. You can input your scores in the form below the clicker scores, and press "Save" to make them display in the table.
 
 7. You can also download all the inputted scores in .xlsx format by clicking the "Download Scores" button
+
+8. On the Gear icon to the left, you can add your own custom key bindings on PC only, (must be a letter, number or special character) and activate/de-activate the flashing animations during scoring.
+
+
+# Disclaimer:
+
+All results are saved locally to your browser, but will be **permanently lost** if clearing browser cookies. To avoid inadvertently losing your data, be sure to **download your inputted scores** using the "Download Scores" button.
