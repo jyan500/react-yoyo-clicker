@@ -5,6 +5,7 @@ import { initialStateType, setNumberMode, setBorderMode, setPlusOneKey, setMinus
 import { AutoDisabledInput as Input } from "./AutoDisabledInput" 
 import { styles, colorVariants, buttonTheme, zIndices } from "../../assets/styles" 
 import { IoMdClose } from "react-icons/io";
+import { useMediaQuery } from "react-responsive" 
 
 
 type InputKeys = "minusOneKey" | "plusOneKey" | "plusTwoKey"
@@ -30,6 +31,7 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 	}
 	const [tempKeys, setTempKeys] = useState(defaultTempKeys)
 	const defaultButton = `${styles.button} ${buttonTheme("blue")}`
+	const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 	const validate = () => {
 		const vals = Object.values(tempKeys)
 		const uniqueKeys = new Set(vals)
@@ -75,27 +77,32 @@ export const SidePanel = ({showSettings, setShowSettingsPanel: setShowSettings}:
 					    type="checkbox" 
 					    className={styles.checkbox}/>
 				</div>
-				<div className = "mt-4 mb-4 border-b-2 border-white">
-					<label className={styles.label}>Update Key Bindings</label>	
-					<p className = {`${isKeyBindingError ? "visible": "hidden"} ${styles.text} ${colorVariants.red}`}>
-						Key Bindings Must Be Unique
-					</p>
-				</div>
-				{[
-					{type: "Plus One Key", "value": "plusOneKey"}, 
-					{type: "Plus Two Key", value: "plusTwoKey"}, 
-					{type: "Minus One Key", value: "minusOneKey"}].map((keyType) => {
-						return (
-							<div className = "flex flex-col mt-2 mb-2">
-							    <label className={`${styles.label}`}>{keyType.type}</label>
-								<Input 
-								maxLength={1}
-								onChange = {(e) => {
-									setTempKeys({...tempKeys, [keyType.value]: e.target.value})}
-								} className = {`${styles.textInputDark} w-1/4`} value = {tempKeys[keyType.value as keyof typeof defaultTempKeys]}/>
-						    </div>
-						)
-				})}
+				{!isTabletOrMobile ? (
+					<>
+						<div className = "mt-4 mb-4 border-b-2 border-white">
+							<label className={styles.label}>Update Key Bindings</label>	
+							<p className = {`${isKeyBindingError ? "visible": "hidden"} ${styles.text} ${colorVariants.red}`}>
+								Key Bindings Must Be Unique
+							</p>
+						</div>
+						{[
+							{type: "Plus One Key", "value": "plusOneKey"}, 
+							{type: "Plus Two Key", value: "plusTwoKey"}, 
+							{type: "Minus One Key", value: "minusOneKey"}].map((keyType) => {
+								return (
+									<div className = "flex flex-col mt-2 mb-2">
+									    <label className={`${styles.label}`}>{keyType.type}</label>
+										<Input 
+										maxLength={1}
+										onChange = {(e) => {
+											setTempKeys({...tempKeys, [keyType.value]: e.target.value})}
+										} className = {`${styles.textInputDark} w-1/4`} value = {tempKeys[keyType.value as keyof typeof defaultTempKeys]}/>
+								    </div>
+								)
+						})}
+					</>
+					) : null
+				}
 				<div className = "mt-4"><button onClick = {onSubmit} className = {defaultButton}>Save</button></div>
 			</div>
 		</div>

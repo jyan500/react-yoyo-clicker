@@ -37,8 +37,8 @@ export const ScoreTable = ({editScore, deleteScore}: Props) => {
 							</td>							
 						)	
 					})}
-					<td><button className = {defaultButton} onClick = {() => editScore(score.id)}>Edit Score</button></td>							
-					<td><button className = {alertButton} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
+					<td className = "p-2"><button className = {`${defaultButton}`} onClick = {() => editScore(score.id)}>Edit Score</button></td>							
+					<td className = "p-2"><button className = {`${alertButton}`} onClick = {() => deleteScore(score.id)}>Delete Score</button></td>							
 				</tr>
 				)
 				})
