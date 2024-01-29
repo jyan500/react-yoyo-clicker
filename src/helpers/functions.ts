@@ -15,3 +15,16 @@ export const getColor = (type: "text" | "border", flashTypes: FlashTypes) => {
 	}
 	return color
 }
+
+export const parseLeadingZeroes = (num: number): number => {
+	const n = num.toString().split("")
+	let firstNonZeroChar = 0
+	for (let i = 0; i < n.length; ++i){
+		// as soon as we hit the first non zero character, break
+		if (n[i] !== "0"){
+			firstNonZeroChar = i
+			break
+		}
+	}
+	return parseInt(n.slice(firstNonZeroChar, n.length).join(""))
+}

@@ -4,6 +4,7 @@ import { setIsClickerDisabled, setScores, setScoreForm } from "../../reducers/cl
 import { styles, buttonTheme } from "../../assets/styles" 
 import { ScoreForm as ScoreFormType } from "../../types/common" 
 import { AutoDisabledInput as Input } from "../shared/AutoDisabledInput" 
+import { parseLeadingZeroes } from "../../helpers/functions" 
 import {v4 as uuidv4} from "uuid"
 export const ScoreForm = () => {
 	const dispatch = useAppDispatch()
@@ -30,8 +31,6 @@ export const ScoreForm = () => {
 		Object.keys(form).forEach((key) => {
 			const blankStringField = (key === "judgeName" || key === "playerName" || key === "contestName") && form[key as keyof typeof form] === ""
 			const blankNumberField = (key === "positiveClicks" || key === "negativeClicks") && form[key as keyof typeof form] === ""
-			console.log("blankStringField: ", blankStringField)
-			console.log("blankNumberField: ", blankNumberField)
 			if (keys.includes(key) && (blankStringField || blankNumberField)){
 				setFormErrors((errors) => {
 					return {...errors, [key]: {...errors[key as keyof typeof formErrors], show: true}}
@@ -52,6 +51,7 @@ export const ScoreForm = () => {
 		})
 	}
 
+
 	const submitForm = () => {
 		if (!validateForm()){
 			return	
@@ -64,13 +64,19 @@ export const ScoreForm = () => {
 		if (!isEditing) {
 			tempForm = {...tempForm, id: uuidv4()}
 		}
+		// if the user inputs leading zeroes in the positive score, parse it out.
+		tempForm = {...tempForm, positiveClicks: parseLeadingZeroes(tempForm.positiveClicks)}
+
 		// if the user accidentally inputs a "negative" sign in the negative clicks
 		// section, parse it out
-		if (form.negativeClicks.toString().includes("-")){
-			const parsed = tempForm.negativeClicks.toString().replace("-", "")
-			tempForm = {...tempForm, negativeClicks: parseInt(parsed)}
+		let parsed = tempForm.negativeClicks.toString()
+		if (parsed.includes("-")){
+			parsed = tempForm.negativeClicks.toString().replace("-", "")
 		}
-		// TODO: parse out leading zeroes
+
+		// also parse out any leading zeroes on the negative clicks
+		const parsedNegativeClicks = parseLeadingZeroes(parseInt(parsed))
+		tempForm = {...tempForm, negativeClicks: parsedNegativeClicks}
 		dispatch(setScoreForm(tempForm))
 		isEditing ? dispatch(setScores(savedScores.map((score) => score.id === tempForm.id ? tempForm : score))) : dispatch(setScores([...savedScores, tempForm]))
 		clearForm()
